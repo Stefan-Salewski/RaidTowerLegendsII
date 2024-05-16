@@ -1,0 +1,15 @@
+MENU
+Menu features:
+* 'start new run'
+'store' in roguelike games usually there's currency for permanent upgrades.
+But idk if we doin this, cause then we'd have to add save data
+
+'settings' , we'll add this button right away but initially it'll just be a coming soon page.
+
+
+SETTINGS
+In the case we make settings later, things to add:
+Choice between wasd and arrow keys for movement
+Option to set fps (this'll change the fps variable)
+sound on/off (this is assuming we add sound effects for attacking enemies or something)
+music on/off (this is assuming we add music to the game)
