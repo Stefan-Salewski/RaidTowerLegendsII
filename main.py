@@ -1,5 +1,4 @@
 import pygame
-import menu
 
 # pygame setup
 pygame.init()
@@ -21,18 +20,6 @@ WHITE = (255, 255 , 255)
 pygame.font.init()
 my_font = pygame.font.SysFont('Comic Sans MS', 30)
 
-def menu():
-    # RENDER YOUR GAME HERE
-    title = my_font.render("Raid Tower Legends II", False, WHITE)
-
-    screen.blit(title, (width / 2 - title.get_width() / 2, 100))
-
-    # debug
-    version = my_font.render("0.0.1", False, WHITE)
-    screen.blit(version, (width - version.get_width(), height - version.get_height()))
-
-    fps_counter = my_font.render(str(round(clock.get_fps(), 1)), False, WHITE)
-    screen.blit(fps_counter, (0, 0))
 
 while running:
     # poll for events
@@ -44,12 +31,21 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")
 
-    menu()
+    # RENDER YOUR GAME HERE
+    title = my_font.render("Raid Tower Legends II", False, WHITE)
+
+    screen.blit(title, (width/2 - title.get_width()/2, 100))
+    balls
+
+    #debug
+    fps_counter = my_font.render(str(round(clock.get_fps(), 1)), False, WHITE)
+    screen.blit(fps_counter, (0, 0))
+
 
     # flip() the display to put your work on screen
     pygame.display.flip()
 
     clock.tick(240)  # limits FPS to 60
+    print(clock.get_fps())
 
 pygame.quit()
-
