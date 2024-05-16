@@ -35,7 +35,6 @@ while running:
     title = my_font.render("Raid Tower Legends II", False, WHITE)
 
     screen.blit(title, (width/2 - title.get_width()/2, 100))
-    balls
 
     #debug
     fps_counter = my_font.render(str(round(clock.get_fps(), 1)), False, WHITE)
@@ -45,7 +44,7 @@ while running:
     # flip() the display to put your work on screen
     pygame.display.flip()
 
-    clock.tick(240)  # limits FPS to 60
+    clock.tick(60)  # limits FPS to 60
     print(clock.get_fps())
 
 pygame.quit()
