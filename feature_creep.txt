@@ -9,7 +9,8 @@ But idk if we doin this, cause then we'd have to add save data
 
 SETTINGS
 In the case we make settings later, things to add:
-Choice between wasd and arrow keys for movement
 Option to set fps (this'll change the fps variable)
 sound on/off (this is assuming we add sound effects for attacking enemies or something)
 music on/off (this is assuming we add music to the game)
+toggle fps counter
+make a antialiasing toggle
