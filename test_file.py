@@ -1,3 +1,6 @@
+# stuff
+
+
 import pygame
 import random
 
@@ -36,7 +39,7 @@ while run:
     # two different configurations, wasd or arrow keys
     key = pygame.key.get_pressed()
 
-    player_moving = pygame.math.Vector2 #creating a vector for player movement
+    player_moving = pygame.math.Vector2() #creating a vector for player movement
     player_speed = 5
 
     #setting direction of vector based on key inputs, both wasd and arrow keys work
