@@ -36,9 +36,10 @@ while run:
     # two different configurations, wasd or arrow keys
     key = pygame.key.get_pressed()
 
-    player_moving = pygame.Vector2()
+    player_moving = pygame.math.Vector2 #creating a vector for player movement
     player_speed = 5
 
+    #setting direction of vector based on key inputs, both wasd and arrow keys work
     if (key[pygame.K_w]) or (key[pygame.K_UP]):
         player_moving.y -= 1
     if (key[pygame.K_s]) or (key[pygame.K_DOWN]):
