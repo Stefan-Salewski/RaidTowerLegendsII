@@ -1,5 +1,5 @@
 import pygame
-#import menu
+from menu import menu
 
 # pygame setup
 pygame.init()
@@ -26,20 +26,9 @@ colours = [WHITE,BLACK,RED,BLUE,GREEN]
 
 #text
 pygame.font.init()
-my_font = pygame.font.SysFont('Comic Sans MS', 30)
-
-def menu(clock,colours,screen):
-    # RENDER YOUR GAME HERE
-    title = my_font.render("Raid Tower Legends II", False, colours[0])
-
-    screen.blit(title, (SCREEN_WIDTH / 2 - title.get_width() / 2, 100))
-
-    # debug
-    version = my_font.render("0.0.1", False, colours[0])
-    screen.blit(version, (SCREEN_WIDTH - version.get_width(), SCREEN_HEIGHT - version.get_height()))
-
-    fps_counter = my_font.render(str(round(clock.get_fps(), 1)), False, colours[0])
-    screen.blit(fps_counter, (0, 0))
+REGULAR_FONT = pygame.font.SysFont('Baskerville', 30)
+TITLE_FONT = pygame.font.SysFont("Baskerville", 70)
+fonts = [REGULAR_FONT, TITLE_FONT]
 
 while running:
     # poll for events
@@ -51,11 +40,11 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")
 
-    menu()
+    menu(SCREEN_WIDTH,SCREEN_HEIGHT,clock,fps,colours,screen,fonts)
 
     # flip() the display to put your work on screen
-    pygame.display.flip()
 
+    pygame.display.flip()
     clock.tick(fps)  # limits FPS to fps
 
 pygame.quit()
