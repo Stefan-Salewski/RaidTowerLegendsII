@@ -49,9 +49,9 @@ while run:
         player_moving.x += 1
 
     # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
-    if (player_moving.length() > 0) :
+    if (player_moving.length() > 0) : #if there's movement basically.
         player_moving = player_moving.normalize() * player_speed #multiplying unit vector by speed
-    player.move_ip(player_moving.x, player_moving.y)
+    player.move_ip(player_moving.x, player_moving.y) # moving it by whatever the new vectors coordinates are
 
 
 
