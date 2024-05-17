@@ -19,3 +19,38 @@ POWERUPS
 speed boost
 gigantification (health+, size+,bigger bullets, dmg+)
 invincibility star --> invulnerable state for a period of time, really just whatever is easiest to code
+
+ENTITIES
+Attributes:
+health
+damage (? only bullet and enemy deal damage. however, in player a 'damage' multiplier could be present)
+defense (? unnecessary)
+invulnerability
+
+Methods:
+(idk)
+Bullet entity
+methods:
+- upon collision w/ enemy deals damage based on player stats
+
+Enemy entity
+methods:
+- upon collision w/ player deals damage
+- will seek out player
+- cannot go through walls
+- will spawn randomly with a certain amount per wave, certain amount of waves per level
+- (unnecessary) adding enemy subtypes (e.g. ghosts that can pass through walls)
+
+Player entity
+methods:
+- controllable by user
+- points towards cursor
+- fires bullets upon cursor click
+- can gain power ups
+
+Wall entity
+- overlaps with level walls
+- invulnerable
+- upon collision with enemy or non-ghost type enemies, other entities will be unable to enter the wall.
+possible addition to walls:
+bounciness. So maybe some walls are bouncy. idk though might be hard to code
