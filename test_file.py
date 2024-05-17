@@ -36,12 +36,22 @@ while run:
     # two different configurations, wasd or arrow keys
     key = pygame.key.get_pressed()
 
-    speed = pygame.Vector2()
+    player_moving = pygame.Vector2()
+    player_speed = 5
 
-    speed.x = 5
-    speed.y = 5
-    if key[pygame.K_w] or key[pygame.K_UP]:
-        player.move_ip(speed)
+    if (key[pygame.K_w]) or (key[pygame.K_UP]):
+        player_moving.y -= 1
+    if (key[pygame.K_s]) or (key[pygame.K_DOWN]):
+        player_moving.y += 1
+    if (key[pygame.K_a]) or (key[pygame.K_LEFT]):
+        player_moving.x -= 1
+    if (key[pygame.K_d]) or (key[pygame.K_RIGHT]):
+        player_moving.x += 1
+
+    # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
+    if (player_moving.length() > 0) :
+        player_moving = player_moving.normalize() * player_speed #multiplying unit vector by speed
+    player.move_ip(player_moving.x, player_moving.y)
 
 
 
