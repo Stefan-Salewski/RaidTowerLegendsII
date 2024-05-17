@@ -16,7 +16,7 @@ fps = 60
 running = True
 
 #colors
-#COLOURS
+#COLOURS sdf
 RED = (255,0,0)
 WHITE = (255,255,255)
 BLACK = (0,0,0)
