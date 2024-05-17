@@ -40,6 +40,7 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")
 
+    # Function to display menu
     menu(SCREEN_WIDTH,SCREEN_HEIGHT,clock,fps,colours,screen,fonts)
 
     # flip() the display to put your work on screen

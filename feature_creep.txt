@@ -13,4 +13,9 @@ Option to set fps (this'll change the fps variable)
 sound on/off (this is assuming we add sound effects for attacking enemies or something)
 music on/off (this is assuming we add music to the game)
 toggle fps counter
-make a antialiasing toggle
+make an antialiasing toggle
+
+POWERUPS
+speed boost
+gigantification (health+, size+,bigger bullets, dmg+)
+invincibility star --> invulnerable state for a period of time, really just whatever is easiest to code
