@@ -16,23 +16,29 @@ fps = 60
 running = True
 
 #colors
-WHITE = (255, 255 , 255)
+#COLOURS
+RED = (255,0,0)
+WHITE = (255,255,255)
+BLACK = (0,0,0)
+BLUE = (0,0,255)
+GREEN = (0,255,0)
+colours = [WHITE,BLACK,RED,BLUE,GREEN]
 
 #text
 pygame.font.init()
 my_font = pygame.font.SysFont('Comic Sans MS', 30)
 
-def menu():
+def menu(clock,colours,screen):
     # RENDER YOUR GAME HERE
-    title = my_font.render("Raid Tower Legends II", False, WHITE)
+    title = my_font.render("Raid Tower Legends II", False, colours[0])
 
     screen.blit(title, (SCREEN_WIDTH / 2 - title.get_width() / 2, 100))
 
     # debug
-    version = my_font.render("0.0.1", False, WHITE)
+    version = my_font.render("0.0.1", False, colours[0])
     screen.blit(version, (SCREEN_WIDTH - version.get_width(), SCREEN_HEIGHT - version.get_height()))
 
-    fps_counter = my_font.render(str(round(clock.get_fps(), 1)), False, WHITE)
+    fps_counter = my_font.render(str(round(clock.get_fps(), 1)), False, colours[0])
     screen.blit(fps_counter, (0, 0))
 
 while running:
