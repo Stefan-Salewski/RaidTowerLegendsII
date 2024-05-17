@@ -1,22 +1,14 @@
-import pygame
+def menu(SCREEN_WIDTH, SCREEN_HEIGHT, clock, fps, colours, screen, fonts):
+    # RENDER YOUR GAME HERE
+    REGULAR_FONT = fonts[0]
+    TITLE_FONT = fonts[1]
+    title_display = TITLE_FONT.render("Raid Tower Legends II", True, colours[0])
 
-print("Hello")
-
-WHITE = (255, 255 , 255)
-
-#text
-pygame.font.init()
-my_font = pygame.font.SysFont('Comic Sans MS', 30)
-my_font_pos = (0,5)
-
-# RENDER YOUR GAME HERE
-title = my_font.render("Raid Tower Legends II", False, WHITE)
-
-#screen.blit(title, (width / 2 - title.get_width() / 2, 100))
+    screen.blit(title_display, (SCREEN_WIDTH / 2 - title_display.get_width() / 2, 100))
 
     # debug
-version = my_font.render("0.0.1", False, WHITE)
-#screen.blit(version, (width - version.get_width(), height - version.get_height()))
+    version = REGULAR_FONT.render("0.0.1", True, colours[0])
+    screen.blit(version, (SCREEN_WIDTH - version.get_width(), SCREEN_HEIGHT - version.get_height()))
 
-fps_counter = my_font.render(str(round(clock.get_fps(), 1)), False, WHITE)
-#screen.blit(fps_counter, (0, 0))
+    fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[0])
+    screen.blit(fps_counter, (0, 0))
