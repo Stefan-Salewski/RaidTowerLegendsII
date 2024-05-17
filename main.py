@@ -1,7 +1,7 @@
 import pygame
 from menu import menu
 
-# pygame setup
+#pygame setup
 pygame.init()
 
 #window settings
@@ -48,4 +48,3 @@ while running:
     clock.tick(fps)  # limits FPS to fps
 
 pygame.quit()
-
