@@ -2,6 +2,7 @@ import pygame
 
 from level_generation import level_generation
 from menu import menu
+from Entity_Classes import Entity,Player
 
 #pygame setup
 pygame.init()
@@ -18,7 +19,7 @@ fps = 60
 running = True
 
 #colors
-#COLOURS sdf
+#COLOURS
 RED = (255,0,0)
 WHITE = (255,255,255)
 BLACK = (0,0,0)
@@ -39,6 +40,9 @@ roomlist = []
 #debug below
 roomlist = level_generator.generate_level(10, roomlist, 0)
 
+# Player initialization, move this to menu so that it only happens at start of game
+# player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT)
+
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -57,6 +61,9 @@ while running:
 
     # Function to display menu
     menu(SCREEN_WIDTH,SCREEN_HEIGHT,clock,colours,screen,fonts)
+
+    # function to move the player, it works, but deactivated for now
+    # player_entity.player_movement(screen)
 
     # flip() the display to put your work on screen
 

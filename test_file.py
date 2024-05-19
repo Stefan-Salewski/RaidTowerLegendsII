@@ -57,6 +57,8 @@ while run:
         player_moving = player_moving.normalize() * player_speed #multiplying unit vector by speed
     player.move_ip(player_moving.x, player_moving.y) # moving it by whatever the new vectors coordinates are
 
+    # Making sure our player stays in the screen
+    player.clamp_ip(screen.get_rect())
 
 
 
