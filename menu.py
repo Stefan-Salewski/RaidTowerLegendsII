@@ -1,4 +1,4 @@
-def menu(SCREEN_WIDTH, SCREEN_HEIGHT, clock, fps, colours, screen, fonts):
+def menu(SCREEN_WIDTH, SCREEN_HEIGHT, clock, colours, screen, fonts):
     # RENDER YOUR GAME HERE
     REGULAR_FONT = fonts[0]
     TITLE_FONT = fonts[1]

@@ -56,7 +56,7 @@ while running:
         pygame.draw.rect(screen, WHITE, roomlist[i])
 
     # Function to display menu
-    menu(SCREEN_WIDTH,SCREEN_HEIGHT,clock,fps,colours,screen,fonts)
+    menu(SCREEN_WIDTH,SCREEN_HEIGHT,clock,colours,screen,fonts)
 
     # flip() the display to put your work on screen
 
