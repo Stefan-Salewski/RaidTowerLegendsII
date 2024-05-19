@@ -1,4 +1,6 @@
 import pygame
+
+from level_generation import level_generation
 from menu import menu
 
 #pygame setup
@@ -30,6 +32,13 @@ REGULAR_FONT = pygame.font.SysFont('Baskerville', 30)
 TITLE_FONT = pygame.font.SysFont("Baskerville", 70)
 fonts = [REGULAR_FONT, TITLE_FONT]
 
+#game
+level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
+roomlist = []
+
+#debug below
+roomlist = level_generator.generate_level(10, roomlist, 0)
+
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -37,8 +46,14 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")
+
+    #draw some rooms
+
+    for i in range(len(roomlist)):
+        pygame.draw.rect(screen, WHITE, roomlist[i])
 
     # Function to display menu
     menu(SCREEN_WIDTH,SCREEN_HEIGHT,clock,fps,colours,screen,fonts)
