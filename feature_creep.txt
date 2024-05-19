@@ -15,6 +15,9 @@ music on/off (this is assuming we add music to the game)
 toggle fps counter
 make an antialiasing toggle
 
+PAUSE BUTTON
+During game play, ability to toggle settings and quit game or restart with new run
+
 POWERUPS
 speed boost
 gigantification (health+, size+,bigger bullets with more dmg, body dmg+)
