@@ -1,7 +1,7 @@
 import pygame
 
 from level_generation import level_generation
-from menu import menu
+from menu import Menu
 from Entity_Classes import Entity,Player
 
 #pygame setup
@@ -60,7 +60,7 @@ while running:
         pygame.draw.rect(screen, WHITE, roomlist[i])
 
     # Function to display menu
-    menu(SCREEN_WIDTH,SCREEN_HEIGHT,clock,colours,screen,fonts)
+    Menu(SCREEN_WIDTH,SCREEN_HEIGHT,clock,colours,screen,fonts)
 
     # function to move the player, it works, but deactivated for now
     # player_entity.player_movement(screen)
