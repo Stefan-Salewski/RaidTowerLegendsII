@@ -33,22 +33,22 @@ class level_generation():
         room.append(topright)
         #left wall
         lefttop = self.pygame.Rect(x, y, 10, 400)
-        leftdoor = self.pygame.Rect(x, y - 400, 10, 200)
-        leftbot = self.pygame.Rect(x, y - 600, 10, 400)
+        leftdoor = self.pygame.Rect(x, y + 400, 10, 200)
+        leftbot = self.pygame.Rect(x, y + 600, 10, 400)
         room.append(lefttop)
         room.append(leftdoor)
         room.append(leftbot)
         #bottom wall
-        botleft = self.pygame.Rect(x, y -1000, 400, 10)
-        botdoor = self.pygame.Rect(x + 400, y - 1000, 200, 10)
-        botright = self.pygame.Rect(x + 600, y - 1000, 400, 10)
+        botleft = self.pygame.Rect(x, y + 1000, 400, 10)
+        botdoor = self.pygame.Rect(x + 400, y + 1000, 200, 10)
+        botright = self.pygame.Rect(x + 600, y + 1000, 400, 10)
         room.append(botleft)
         room.append(botdoor)
         room.append(botright)
         #right wall
         righttop = self.pygame.Rect(x + 1000, y, 10, 400)
-        rightdoor = self.pygame.Rect(x + 1000, y - 400, 10, 200)
-        rightbot = self.pygame.Rect(x + 1000, y - 600, 10, 400)
+        rightdoor = self.pygame.Rect(x + 1000, y + 400, 10, 200)
+        rightbot = self.pygame.Rect(x + 1000, y + 600, 10, 400)
         room.append(righttop)
         room.append(rightdoor)
         room.append(rightbot)
@@ -74,15 +74,34 @@ class level_generation():
                 # Determine the new room position based on the random number
                 if randomnum == 0:  # up
                     newroom = self.create_room(prevx[len(prevx) - 1], prevy[len(prevy) - 1] + 1000)
+                    newx = prevx[len(prevx) - 1]
+                    newy = prevy[len(prevy) - 1] + 1000
                 elif randomnum == 1:  # left
                     newroom = self.create_room(prevx[len(prevx) - 1] - 1000, prevy[len(prevy) - 1])
+                    newx = prevx[len(prevx) - 1] - 1000
+                    newy = prevy[len(prevy) - 1]
                 elif randomnum == 2:  # down
                     newroom = self.create_room(prevx[len(prevx) - 1], prevy[len(prevy) - 1] - 1000)
+                    newx = prevx[len(prevx) - 1]
+                    newy = prevy[len(prevy) - 1] - 1000
                 elif randomnum == 3:  # right
                     newroom = self.create_room(prevx[len(prevx) - 1] + 1000, prevy[len(prevy) - 1])
+                    newx = prevx[len(prevx) - 1] + 1000
+                    newy = prevy[len(prevy) - 1]
 
-                rooms.append(newroom)
-                generating = False
+                occupied = False
+
+                for i in range(len(prevx)):
+                    if newx == prevx[i] and newy == prevy[i]:
+                        occupied = True
+                        break
+
+                if not occupied:
+                    prevx.append(newx)
+                    prevy.append(newy)
+                    rooms.append(newroom)
+                    generating = False
+
         else:
             rooms.append(self.create_room(0, 0))
             prevx.append(0)

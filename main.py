@@ -10,8 +10,8 @@ pygame.init()
 
 # window settings
 pygame.display.set_caption('Raid Tower Legends II')
-SCREEN_WIDTH = 1080
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1920
+SCREEN_HEIGHT = 900
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # clock
@@ -46,8 +46,7 @@ quit = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.8, quit_img, quit_img_hover,
 # game
 level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
 roomlist = []
-CameraX = 0
-CameraY = 0
+offset = pygame.math.Vector2()
 
 # Player initialization, move this to menu so that it only happens at start of game
 player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT) # dimensions are automatically halved in the function
