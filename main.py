@@ -75,11 +75,14 @@ while running:
             running = False
 
     elif game_state == "playing":
+
         screen.fill("purple")
 
         # draw the rooms
         for room in roomlist:
             pygame.draw.rect(screen, colours[0], room)
+            fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[0])
+            screen.blit(fps_counter, (0, 0))
 
         # add player movement and other game logic here
 
