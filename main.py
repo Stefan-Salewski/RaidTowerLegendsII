@@ -34,12 +34,14 @@ TITLE_FONT = pygame.font.SysFont("Baskerville", 70)
 fonts = [REGULAR_FONT, TITLE_FONT]
 
 # buttons graphics
-start_img = pygame.image.load("Start.png").convert_alpha()
-quit_img = pygame.image.load("Quit.png").convert_alpha()
+start_img = pygame.image.load("start.png").convert_alpha()
+quit_img = pygame.image.load("quit.png").convert_alpha()
+start_img_hover = pygame.image.load("start_select.png").convert_alpha()
+quit_img_hover = pygame.image.load("quit_select.png").convert_alpha()
 
 # initializing buttons outside the loop
-start = Button(SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.8, start_img, 0.9)
-quit = Button(SCREEN_WIDTH * 0.8, SCREEN_HEIGHT * 0.8, quit_img, 0.85)
+start = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5, start_img, start_img_hover, 0.7)
+quit = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.8, quit_img, quit_img_hover,0.7)
 
 # game
 level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -68,10 +70,12 @@ while running:
         start.draw(screen)
         quit.draw(screen)
 
+
         if start.function():
             # level generation
             roomlist = level_generator.generate_level(10, roomlist, 0)
             game_state = "playing"
+
         if quit.function():
             running = False
 
