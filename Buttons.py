@@ -3,7 +3,7 @@
 
 import pygame
 class Button():
-    def __init__(self,x,y,image,scale):
+    def __init__(self,x,y,image,hover_image,scale):
         # locking aspect ratio
         image_width = image.get_width()
         image_height = image.get_height()
@@ -23,6 +23,7 @@ class Button():
 
         # checking if the cursor is colliding with rect obj.
         if (self.rect.collidepoint(pos)):
+
             # Checking if left click is happening, and  only registering it if it's a new click
             # since we don't want continuous holding of the left click button to count as multiple clicks
             if (pygame.mouse.get_pressed()[0] == True) and (self.clicked == False):
