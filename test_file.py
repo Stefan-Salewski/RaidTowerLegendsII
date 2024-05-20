@@ -1,73 +1,87 @@
-# stuff
-
-
 import pygame
-import random
 
-#INITIALIZING WINDOW
+from level_generation import level_generation
+from menu import Menu
+from Buttons import Button
+from Entity_Classes import Entity, Player
+
+# pygame setup
 pygame.init()
-SCREEN_WIDTH = 1100
-SCREEN_HEIGHT = 600
 
-#CREATING DISPLAY,PLAYER, AND FPS COMMANDS
-screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
-player = pygame.Rect((SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), 50, 50)
+# window settings
+pygame.display.set_caption('Raid Tower Legends II')
+SCREEN_WIDTH = 1080
+SCREEN_HEIGHT = 600
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+# clock
 clock = pygame.time.Clock()
 fps = 60
+running = True
 
-#COLOURS
-RED = (255,0,0)
-WHITE = (255,255,255)
-BLACK = (0,0,0)
-BLUE = (0,0,255)
-GREEN = (0,255,0)
-RANDOM = ((random.randint(0,255)),(random.randint(0,255)),(random.randint(0,255)))
-colours = [WHITE,BLACK,RED,BLUE,GREEN,RANDOM]
+# colors
+RED = (255, 0, 0)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+BLUE = (0, 0, 255)
+GREEN = (0, 255, 0)
+colours = [WHITE, BLACK, RED, BLUE, GREEN]
 
-# MAIN LOOP
-run = True
-while run:
-    #filling bg and drawing our player
-    screen.fill(colours[0])
-    pygame.draw.rect(screen,colours[5], player)
+# text
+pygame.font.init()
+REGULAR_FONT = pygame.font.SysFont('Baskerville', 30)
+TITLE_FONT = pygame.font.SysFont("Baskerville", 70)
+fonts = [REGULAR_FONT, TITLE_FONT]
 
-    #making sure X'ing the window closes the program
+# buttons graphics
+start_img = pygame.image.load("Start.png").convert_alpha()
+quit_img = pygame.image.load("Quit.png").convert_alpha()
+
+# initializing buttons outside the loop
+start = Button(SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.8, start_img, 0.9)
+quit = Button(SCREEN_WIDTH * 0.8, SCREEN_HEIGHT * 0.8, quit_img, 0.85)
+
+# game
+level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
+roomlist = []
+
+# state variable
+game_state = "menu"
+
+while running:
+    # poll for events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
+            running = False
 
-    # two different configurations, wasd or arrow keys
-    key = pygame.key.get_pressed()
+    if game_state == "menu":
+        # fill the screen with a color to wipe away anything from last frame
+        screen.fill("purple")
 
-    player_moving = pygame.math.Vector2() #creating a vector for player movement
-    player_speed = 5
+        # Function to display menu
+        Menu(SCREEN_WIDTH, SCREEN_HEIGHT, clock, colours, screen, fonts)
 
-    #setting direction of vector based on key inputs, both wasd and arrow keys work
-    if (key[pygame.K_w]) or (key[pygame.K_UP]):
-        player_moving.y -= 1
-    if (key[pygame.K_s]) or (key[pygame.K_DOWN]):
-        player_moving.y += 1
-    if (key[pygame.K_a]) or (key[pygame.K_LEFT]):
-        player_moving.x -= 1
-    if (key[pygame.K_d]) or (key[pygame.K_RIGHT]):
-        player_moving.x += 1
+        start.draw(screen)
+        quit.draw(screen)
 
-    # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
-    if (player_moving.length() > 0) : #if there's movement basically.
-        player_moving = player_moving.normalize() * player_speed #multiplying unit vector by speed
-    player.move_ip(player_moving.x, player_moving.y) # moving it by whatever the new vectors coordinates are
+        if start.function():
+            # level generation
+            roomlist = level_generator.generate_level(10, roomlist, 0)
+            game_state = "playing"
+        if quit.function():
+            running = False
 
-    # Making sure our player stays in the screen
-    player.clamp_ip(screen.get_rect())
+    elif game_state == "playing":
+        screen.fill("purple")
 
+        # draw the rooms
+        for room in roomlist:
+            pygame.draw.rect(screen, colours[0], room)
 
+        # add player movement and other game logic here
 
-
-
-
-
+    # flip the display to put your work on screen
     pygame.display.flip()
     clock.tick(fps)
-
 
 pygame.quit()
