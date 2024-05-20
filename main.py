@@ -46,10 +46,11 @@ level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
 roomlist = []
 
 # Player initialization, move this to menu so that it only happens at start of game
-# player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT)
+player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT) # dimensions are automatically halved in the function
 
 # state variable
 game_state = "menu"
+
 
 while running:
     # poll for events
@@ -83,8 +84,10 @@ while running:
             pygame.draw.rect(screen, colours[0], room)
             fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[0])
             screen.blit(fps_counter, (0, 0))
-            pass
+
         # add player movement and other game logic here
+        player_entity.player_movement(screen)
+
 
     # flip the display to put your work on screen
     pygame.display.flip()
