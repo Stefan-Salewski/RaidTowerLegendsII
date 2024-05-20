@@ -23,6 +23,7 @@ class Player(Entity):
         self.health = health
         self.damage = damage
         self.player = pygame.Rect((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 50, 50)
+        self.player_speed = 5
         print("Player initialized")
 
     def player_movement(self,screen_instance):
@@ -31,7 +32,6 @@ class Player(Entity):
         key = pygame.key.get_pressed()
 
         player_moving = pygame.math.Vector2()  # creating a vector for player movement
-        player_speed = 5
 
         # setting direction of vector based on key inputs, both wasd and arrow keys work
         if (key[pygame.K_w]) or (key[pygame.K_UP]):
@@ -45,7 +45,7 @@ class Player(Entity):
 
         # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
         if (player_moving.length() > 0):  # if there's movement basically.
-            player_moving = player_moving.normalize() * player_speed  # multiplying unit vector by speed
+            player_moving = player_moving.normalize() * self.player_speed  # multiplying unit vector by speed
         self.player.move_ip(player_moving.x, player_moving.y)  # moving it by whatever the new vectors coordinates are
 
         # Making sure our player stays in screen, might remove later, also different ways of doing this.
