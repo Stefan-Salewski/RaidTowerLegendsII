@@ -29,8 +29,8 @@ colours = [WHITE, BLACK, RED, BLUE, GREEN]
 
 # text
 pygame.font.init()
-REGULAR_FONT = pygame.font.SysFont('Baskerville', 30)
-TITLE_FONT = pygame.font.SysFont("Baskerville", 70)
+REGULAR_FONT = pygame.font.Font('Born2bSportyFS.otf', 30)
+TITLE_FONT = pygame.font.Font("Born2bSportyFS.otf", 70)
 fonts = [REGULAR_FONT, TITLE_FONT]
 
 # buttons graphics
@@ -53,6 +53,11 @@ player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT) # dimensions are automaticall
 # state variable
 game_state = "menu"
 
+pygame.mixer.init()
+
+# Load the menu music
+pygame.mixer.music.load("Menu - Spaceship Hangar.wav")
+pygame.mixer.music.play(-1)  # Play the music in a loop
 
 while running:
     # poll for events
@@ -61,6 +66,7 @@ while running:
             running = False
 
     if game_state == "menu":
+
         # fill the screen with a color to wipe away anything from last frame
         screen.fill(colours[1])
 
@@ -72,6 +78,12 @@ while running:
 
 
         if start.function():
+            # Stop menu music
+            pygame.mixer.music.fadeout(3000) # 3 seconds of fadeout
+            # Load and play game music
+            pygame.mixer.music.load("Game - Race Track Chimes.wav") # new music
+            pygame.mixer.music.play(-1)  # Play the music in a loop
+
             # level generation
             roomlist = level_generator.generate_level(10, roomlist, 0)
             game_state = "playing"
