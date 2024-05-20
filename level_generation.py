@@ -74,7 +74,6 @@ class level_generation():
                 # Determine the new room position based on the random number
                 if randomnum == 0:  # up
                     newroom = self.create_room(prevx[len(prevx) - 1], prevy[len(prevy) - 1] + 1000)
-
                 elif randomnum == 1:  # left
                     newroom = self.create_room(prevx[len(prevx) - 1] - 1000, prevy[len(prevy) - 1])
                 elif randomnum == 2:  # down

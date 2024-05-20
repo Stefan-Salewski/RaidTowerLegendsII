@@ -46,6 +46,8 @@ quit = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.8, quit_img, quit_img_hover,
 # game
 level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
 roomlist = []
+CameraX = 0
+CameraY = 0
 
 # Player initialization, move this to menu so that it only happens at start of game
 player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT) # dimensions are automatically halved in the function
@@ -89,7 +91,7 @@ while running:
                 pygame.draw.rect(screen, colours[0], wall)
 
         fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[0])
-        screen.blit(fps_counter, (0, 0))
+        screen.blit(fps_counter, (0 , 0 ))
 
         # add player movement and other game logic here
         player_entity.player_movement(screen)
