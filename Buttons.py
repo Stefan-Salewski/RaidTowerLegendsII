@@ -33,4 +33,17 @@ class Button():
                 self.clicked = False
 
 
+# buttons graphics
+start_img = pygame.image.load("Start.png").convert_alpha()
+quit_img = pygame.image.load("Quit.png").convert_alpha()
 
+# initializing buttons outside the loop
+start = Buttons.Button(SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.8, start_img, 0.9)
+quit = Buttons.Button(SCREEN_WIDTH * 0.8, SCREEN_HEIGHT * 0.8, quit_img, 0.85)
+
+# Make sure buttons do things
+        if (start.function()):
+            # level generation
+            pass
+        if (stop.function()):
+            run = False
