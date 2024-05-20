@@ -3,7 +3,7 @@ import pygame
 from level_generation import level_generation
 from menu import Menu
 from Buttons import Button
-from Entity_Classes import Entity, Player
+from Entity_Classes import Player
 
 # pygame setup
 pygame.init()
