@@ -62,7 +62,7 @@ while running:
 
     if game_state == "menu":
         # fill the screen with a color to wipe away anything from last frame
-        screen.fill("purple")
+        screen.fill(colours[1])
 
         # Function to display menu
         Menu(SCREEN_WIDTH, SCREEN_HEIGHT, clock, colours, screen, fonts)
@@ -81,7 +81,7 @@ while running:
 
     elif game_state == "playing":
 
-        screen.fill("purple")
+        screen.fill(colours[1])
 
         # draw the rooms
         for room in roomlist:
