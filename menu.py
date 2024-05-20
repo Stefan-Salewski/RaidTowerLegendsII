@@ -11,7 +11,7 @@ class Menu():
         screen_instance.blit(title_display, (SCREEN_WIDTH / 2 - title_display.get_width() / 2, 100))
 
         # debug
-        version = REGULAR_FONT.render("0.0.1", True, colours[0])
+        version = REGULAR_FONT.render("0.0.3", True, colours[0])
         screen_instance.blit(version, (SCREEN_WIDTH - version.get_width(), SCREEN_HEIGHT - version.get_height()))
 
         fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[0])

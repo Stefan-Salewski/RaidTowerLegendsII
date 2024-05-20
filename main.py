@@ -41,6 +41,7 @@ quit_img = pygame.image.load("Quit.png").convert_alpha()
 # initializing buttons outside the loop
 start = Button(SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.8, start_img, 0.9)
 quit = Button(SCREEN_WIDTH * 0.8, SCREEN_HEIGHT * 0.8, quit_img, 0.85)
+temp_var = False
 
 #game
 level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -63,10 +64,7 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")
 
-    #draw some rooms
 
-    for i in range(len(roomlist)):
-        pygame.draw.rect(screen, WHITE, roomlist[i])
 
     # Function to display menu
     Menu(SCREEN_WIDTH,SCREEN_HEIGHT,clock,colours,screen,fonts)
@@ -75,7 +73,9 @@ while running:
     quit.draw(screen)
     if (start.function()):
         # level generation
-        pass
+        # draw some rooms
+        for i in range(len(roomlist)):
+            pygame.draw.rect(screen, WHITE, roomlist[i])
     if (quit.function()):
         run = False
 
