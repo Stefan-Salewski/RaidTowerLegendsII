@@ -2,6 +2,7 @@ import pygame
 
 from level_generation import level_generation
 from menu import Menu
+from Buttons import Button
 from Entity_Classes import Entity,Player
 
 #pygame setup
@@ -33,6 +34,14 @@ REGULAR_FONT = pygame.font.SysFont('Baskerville', 30)
 TITLE_FONT = pygame.font.SysFont("Baskerville", 70)
 fonts = [REGULAR_FONT, TITLE_FONT]
 
+# buttons graphics
+start_img = pygame.image.load("Start.png").convert_alpha()
+quit_img = pygame.image.load("Quit.png").convert_alpha()
+
+# initializing buttons outside the loop
+start = Button(SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.8, start_img, 0.9)
+quit = Button(SCREEN_WIDTH * 0.8, SCREEN_HEIGHT * 0.8, quit_img, 0.85)
+
 #game
 level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
 roomlist = []
@@ -61,6 +70,14 @@ while running:
 
     # Function to display menu
     Menu(SCREEN_WIDTH,SCREEN_HEIGHT,clock,colours,screen,fonts)
+
+    start.draw(screen)
+    quit.draw(screen)
+    if (start.function()):
+        # level generation
+        pass
+    if (quit.function()):
+        run = False
 
     # function to move the player, it works, but deactivated for now
     # player_entity.player_movement(screen)
