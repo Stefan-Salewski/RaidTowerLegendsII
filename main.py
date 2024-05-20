@@ -45,6 +45,9 @@ quit = Button(SCREEN_WIDTH * 0.8, SCREEN_HEIGHT * 0.8, quit_img, 0.85)
 level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
 roomlist = []
 
+# Player initialization, move this to menu so that it only happens at start of game
+# player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT)
+
 # state variable
 game_state = "menu"
 
