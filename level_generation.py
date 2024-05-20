@@ -8,7 +8,7 @@
 import random
 class level_generation():
 
-#fun initialization :D
+#fun initialization
     def __init__(self, pygame_instance, screen_instance, width, height):
         self.width = width
         self.height = height
