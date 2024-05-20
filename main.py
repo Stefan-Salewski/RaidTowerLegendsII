@@ -83,7 +83,7 @@ while running:
             pygame.draw.rect(screen, colours[0], room)
             fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[0])
             screen.blit(fps_counter, (0, 0))
-
+            pass
         # add player movement and other game logic here
 
     # flip the display to put your work on screen
