@@ -21,45 +21,59 @@ class level_generation():
         self.GREEN = (0, 255, 0)
         print("HELLO WORLD")
 
+    def create_room(self, x, y):
+        room = []
+
+        #top wall
+        topleft = self.pygame.Rect(x, y,400,10)
+        topmid = self.pygame.Rect(x + 400, y, 200, 10)
+        topright = self.pygame.Rect(x + 600, y, 400, 10)
+        room.append(topleft)
+        room.append(topmid)
+        room.append(topright)
+        #left wall
+
+        #bottom wall
+
+        #right wall
+
+        return room
+    def edit_room(self, room):
+
+        return
+
 #lets go we can draw stuff in classes
-    def generate_level(self, numrooms, roomlist, iteration):
+    def generate_level(self, numrooms, roomlist, iteration, prevx, prevy):
         iteration = iteration
+        prevx = prevx
+        prevy = prevy
+
         #0 of this list should always be the starting room and len(roomlist) is the end of the level
         rooms = roomlist
         if len(rooms) > 0:
             generating = True
             while generating:
                 randomnum = random.randint(0, 3)
-                previousroom = rooms[iteration - 1]
+                #previousroom = rooms[iteration - 1]
 
                 # Determine the new room position based on the random number
                 if randomnum == 0:  # up
-                    newrect = self.pygame.Rect(previousroom.x, previousroom.y + 60, 50, 50)
+                    newroom = self.create_room(prevx[len(prevx) - 1], prevy[len(prevy) - 1] + 50)
                 elif randomnum == 1:  # left
-                    newrect = self.pygame.Rect(previousroom.x - 60, previousroom.y, 50, 50)
+                    newroom = self.create_room(prevx[len(prevx) - 1], prevy[len(prevy) - 1] + 50)
                 elif randomnum == 2:  # down
-                    newrect = self.pygame.Rect(previousroom.x, previousroom.y - 60, 50, 50)
+                    newroom = self.create_room(prevx[len(prevx) - 1], prevy[len(prevy) - 1] + 50)
                 elif randomnum == 3:  # right
-                    newrect = self.pygame.Rect(previousroom.x + 60, previousroom.y, 50, 50)
-
-                # Check if the new room position is already occupied
-                occupied = False
-                for room in rooms:
-                    if newrect.x == room.x and newrect.y == room.y:
-                        occupied = True
-                        break
-
-                if not occupied:
-                    rooms.append(newrect)
-                    generating = False
-
+                    newroom = self.create_room(prevx[len(prevx) - 1], prevy[len(prevy) - 1] + 50)
+                generating = False
         else:
-            #first room in the list
-            rooms.append(self.pygame.Rect((self.width / 2), (self.height / 2), 50, 50))
+            rooms.append(self.create_room(0, 0))
+            prevx.append(0)
+            prevy.append(0)
 
         #recursion
         if iteration == numrooms - 1:
             return rooms
         else:
-            return self.generate_level(numrooms, rooms, iteration + 1)
+            return self.generate_level(numrooms, rooms, iteration + 1, prevx, prevy)
 

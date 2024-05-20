@@ -73,7 +73,7 @@ while running:
 
         if start.function():
             # level generation
-            roomlist = level_generator.generate_level(10, roomlist, 0)
+            roomlist = level_generator.generate_level(10, roomlist, 0, [],[])
             game_state = "playing"
 
         if quit.function():
@@ -85,9 +85,11 @@ while running:
 
         # draw the rooms
         for room in roomlist:
-            pygame.draw.rect(screen, colours[0], room)
-            fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[0])
-            screen.blit(fps_counter, (0, 0))
+            for wall in room:
+                pygame.draw.rect(screen, colours[0], wall)
+
+        fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[0])
+        screen.blit(fps_counter, (0, 0))
 
         # add player movement and other game logic here
         player_entity.player_movement(screen)
