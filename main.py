@@ -76,7 +76,7 @@ while running:
 
         if start.function():
             # Stop menu music
-            pygame.mixer.music.fadeout(3000) # 3 seconds of fadeout
+            pygame.mixer.music.fadeout(1000) # 3 seconds of fadeout
             # Load and play game music
             pygame.mixer.music.load("Game - Race Track Chimes.wav") # new music
             pygame.mixer.music.play(-1)  # Play the music in a loop
