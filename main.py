@@ -9,9 +9,9 @@ from Entity_Classes import Player
 pygame.init()
 
 # window settings
-pygame.display.set_caption('Raid Tower Legends II')
-SCREEN_WIDTH = 1080
-SCREEN_HEIGHT = 600
+pygame.display.set_caption('Raid Tower Legends II: Mighty Morphin Edition©')
+SCREEN_WIDTH = 700
+SCREEN_HEIGHT = 700
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # clock
@@ -76,7 +76,7 @@ while running:
 
         if start.function():
             # Stop menu music
-            pygame.mixer.music.fadeout(1000) # 3 seconds of fadeout
+            pygame.mixer.music.fadeout(500) # 0.5 seconds of fadeout
             # Load and play game music
             pygame.mixer.music.load("Game - Race Track Chimes.wav") # new music
             pygame.mixer.music.play(-1)  # Play the music in a loop
