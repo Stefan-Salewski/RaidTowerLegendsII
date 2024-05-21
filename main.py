@@ -101,6 +101,11 @@ while running:
         # add player movement and other game logic here
         player_entity.player_movement(screen)
 
+    elif game_state == "settings":
+
+        screen.fill("purple")
+
+
 
     # flip the display to put your work on screen
     pygame.display.flip()
