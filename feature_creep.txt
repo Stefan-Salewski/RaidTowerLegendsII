@@ -58,3 +58,6 @@ Wall entity
 - upon collision with enemy or non-ghost type enemies, other entities will be unable to enter the wall.
 possible addition to walls:
 bounciness. So maybe some walls are bouncy. idk though might be hard to code
+
+
+--> health bar

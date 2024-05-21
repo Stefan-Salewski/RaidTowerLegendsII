@@ -18,6 +18,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 fps = 60
 running = True
+game_state = "menu" # default state is menu
 
 # colors
 RED = (255, 0, 0)
@@ -27,10 +28,10 @@ BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 colours = [WHITE, BLACK, RED, BLUE, GREEN]
 
-# text
+# fonts
 pygame.font.init()
-REGULAR_FONT = pygame.font.SysFont('Baskerville', 30)
-TITLE_FONT = pygame.font.SysFont("Baskerville", 70)
+REGULAR_FONT = pygame.font.Font('Born2bSportyFS.otf', 30)
+TITLE_FONT = pygame.font.Font("Born2bSportyFS.otf", 70)
 fonts = [REGULAR_FONT, TITLE_FONT]
 
 # buttons graphics
@@ -43,16 +44,17 @@ quit_img_hover = pygame.image.load("quit_select.png").convert_alpha()
 start = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5, start_img, start_img_hover, 0.7)
 quit = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.8, quit_img, quit_img_hover,0.7)
 
-# game
+# game  levels
 level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
 roomlist = []
 
-# Player initialization, move this to menu so that it only happens at start of game
+# Player initialization
 player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT) # dimensions are automatically halved in the function
 
-# state variable
-game_state = "menu"
-
+# Load the menu music
+pygame.mixer.init()
+pygame.mixer.music.load("Menu - Spaceship Hangar.wav")
+pygame.mixer.music.play(-1)  # Play the music in a loop
 
 while running:
     # poll for events
@@ -61,8 +63,9 @@ while running:
             running = False
 
     if game_state == "menu":
+
         # fill the screen with a color to wipe away anything from last frame
-        screen.fill("purple")
+        screen.fill(colours[1])
 
         # Function to display menu
         Menu(SCREEN_WIDTH, SCREEN_HEIGHT, clock, colours, screen, fonts)
@@ -72,6 +75,12 @@ while running:
 
 
         if start.function():
+            # Stop menu music
+            pygame.mixer.music.fadeout(3000) # 3 seconds of fadeout
+            # Load and play game music
+            pygame.mixer.music.load("Game - Race Track Chimes.wav") # new music
+            pygame.mixer.music.play(-1)  # Play the music in a loop
+
             # level generation
             roomlist = level_generator.generate_level(10, roomlist, 0)
             game_state = "playing"
@@ -81,7 +90,7 @@ while running:
 
     elif game_state == "playing":
 
-        screen.fill("purple")
+        screen.fill(colours[1])
 
         # draw the rooms
         for room in roomlist:

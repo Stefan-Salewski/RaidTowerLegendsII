@@ -16,3 +16,6 @@ class Menu():
 
         fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[0])
         screen_instance.blit(fps_counter, (0, 0))
+
+    def settings_screen(self):
+        pass
