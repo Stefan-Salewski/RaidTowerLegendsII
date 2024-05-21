@@ -61,3 +61,6 @@ bounciness. So maybe some walls are bouncy. idk though might be hard to code
 
 
 --> health bar
+
+May-21, next steps:
+camera movement, settings,entities,healthbars,powerups,enemy types,pause button
