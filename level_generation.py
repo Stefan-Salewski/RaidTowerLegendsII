@@ -2,7 +2,7 @@
 #level_generation.py
 #Has all the code to generate each level
 #Can be called from main to generate a list of rooms
-# Stefan Salewski
+#Stefan Salewski
 #*************************************************
 
 import random
