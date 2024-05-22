@@ -39,10 +39,13 @@ start_img = pygame.image.load("start.png").convert_alpha()
 quit_img = pygame.image.load("quit.png").convert_alpha()
 start_img_hover = pygame.image.load("start_select.png").convert_alpha()
 quit_img_hover = pygame.image.load("quit_select.png").convert_alpha()
+settings_img = pygame.image.load("settings.png").convert_alpha()
+settings_img_hover = pygame.image.load("settings_hover.png")
 
 # initializing buttons outside the loop
 start = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5, start_img, start_img_hover, 0.7)
 quit = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.8, quit_img, quit_img_hover,0.7)
+settings = Button(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.05, settings_img,settings_img_hover,0.2)
 
 # game  levels
 level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -73,6 +76,7 @@ while running:
 
         start.draw(screen)
         quit.draw(screen)
+        settings.draw(screen)
 
 
         if start.function():
@@ -89,6 +93,9 @@ while running:
         if quit.function():
             running = False
 
+        if settings.function():
+            game_state = "settings"
+
     elif game_state == "playing":
 
         screen.fill(colours[1])
@@ -98,7 +105,7 @@ while running:
             for wall in room:
                 pygame.draw.rect(screen, colours[0], wall)
 
-        fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[0])
+        fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[2])
         screen.blit(fps_counter, (0 , 0 ))
 
         # add player movement and other game logic here
