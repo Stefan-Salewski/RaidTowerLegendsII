@@ -11,17 +11,19 @@ RANDOM = ((random.randint(0,255)),(random.randint(0,255)),(random.randint(0,255)
 colours = [WHITE,BLACK,RED,BLUE,GREEN,RANDOM]
 
 class Entity():
-    def __init__(self,invulnerability,health,damage,):
+    def __init__(self,invulnerability,health,damage,cancolide):
         self.invulnerability = invulnerability
         self.health = health
         self.damage = damage
+        self.cancollide = cancolide
         print("Entity spawning")
 
 class Player(Entity):
-    def __init__(self,SCREEN_WIDTH,SCREEN_HEIGHT,invulnerability = False, health = 100, damage = 0):
+    def __init__(self,SCREEN_WIDTH,SCREEN_HEIGHT,invulnerability = False, health = 100, damage = 0, cancollide = True):
         self.invulnerability = invulnerability
         self.health = health
         self.damage = damage
+        self.cancollide = cancollide
         self.player = pygame.Rect((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 50, 50)
         self.player_speed = 5
         print("Player initialized")
