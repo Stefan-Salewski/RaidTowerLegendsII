@@ -14,6 +14,7 @@ sound on/off (this is assuming we add sound effects for attacking enemies or som
 music on/off (this is assuming we add music to the game)
 toggle fps counter
 make an antialiasing toggle
+Make a back button
 
 PAUSE BUTTON
 During game play, ability to toggle settings and quit game or restart with new run

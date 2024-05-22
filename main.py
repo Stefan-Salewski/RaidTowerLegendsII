@@ -40,12 +40,12 @@ quit_img = pygame.image.load("quit.png").convert_alpha()
 start_img_hover = pygame.image.load("start_select.png").convert_alpha()
 quit_img_hover = pygame.image.load("quit_select.png").convert_alpha()
 settings_img = pygame.image.load("settings.png").convert_alpha()
-settings_img_hover = pygame.image.load("settings_hover.png")
+settings_img_hover = pygame.image.load("settings_hover.png").convert_alpha()
 
 # initializing buttons outside the loop
 start = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5, start_img, start_img_hover, 0.7)
 quit = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.8, quit_img, quit_img_hover,0.7)
-settings = Button(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.05, settings_img,settings_img_hover,0.2)
+settings = Button(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.05, settings_img,settings_img_hover,0.1)
 
 # game  levels
 level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -113,7 +113,9 @@ while running:
 
     elif game_state == "settings":
 
-        screen.fill("purple")
+        screen.fill("black")
+        coming_soon = TITLE_FONT.render("Settings: Coming Soon", True, colours[0])
+        screen.blit(coming_soon, (SCREEN_WIDTH / 2 - coming_soon.get_width() / 2, 100))
 
 
 
