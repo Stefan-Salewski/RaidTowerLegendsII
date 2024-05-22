@@ -42,11 +42,13 @@ class Player(Entity):
             player_moving.x -= 1
         if (key[pygame.K_d]) or (key[pygame.K_RIGHT]):
             player_moving.x += 1
-
         # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
         if (player_moving.length() > 0):  # if there's movement basically.
             player_moving = player_moving.normalize() * self.player_speed  # multiplying unit vector by speed
+            camera_offset = (-1 * (player_moving.normalize() * self.player_speed)) # making sure camera follows
+
         self.player.move_ip(player_moving.x, player_moving.y)  # moving it by whatever the new vectors coordinates are
+
 
         # Making sure our player stays in screen, might remove later, also different ways of doing this.
         self.player.clamp_ip(screen_instance.get_rect())

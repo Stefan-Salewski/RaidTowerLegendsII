@@ -47,6 +47,7 @@ quit = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.8, quit_img, quit_img_hover,
 # game  levels
 level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
 roomlist = []
+offset = pygame.math.Vector2()
 
 # Player initialization
 player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT) # dimensions are automatically halved in the function
@@ -82,7 +83,7 @@ while running:
             pygame.mixer.music.play(-1)  # Play the music in a loop
 
             # level generation
-            roomlist = level_generator.generate_level(10, roomlist, 0)
+            roomlist = level_generator.generate_level(10, roomlist, 0, [],[])
             game_state = "playing"
 
         if quit.function():
@@ -94,9 +95,11 @@ while running:
 
         # draw the rooms
         for room in roomlist:
-            pygame.draw.rect(screen, colours[0], room)
-            fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[0])
-            screen.blit(fps_counter, (0, 0))
+            for wall in room:
+                pygame.draw.rect(screen, colours[0], wall)
+
+        fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[0])
+        screen.blit(fps_counter, (0 , 0 ))
 
         # add player movement and other game logic here
         player_entity.player_movement(screen)
