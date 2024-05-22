@@ -65,3 +65,6 @@ bounciness. So maybe some walls are bouncy. idk though might be hard to code
 
 May-21, next steps:
 camera movement, settings,entities,healthbars,powerups,enemy types,pause button
+
+
+ Make it so that player spawns in the centre of the first level.

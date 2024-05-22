@@ -47,6 +47,14 @@ start = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5, start_img, start_img_hov
 quit = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.8, quit_img, quit_img_hover,0.7)
 settings = Button(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.05, settings_img,settings_img_hover,0.1)
 
+# Get the dimensions of the settings button image
+settings_width = settings_img_hover.get_width() * 0.05 # multiplied by scale
+settings_height = settings_img_hover.get_height() * 0.05 # multiplied by scale
+
+# Calculate the white rectangle for the settings button
+settings_white_rect = pygame.Rect(0, 0, settings_width, settings_height)
+settings_white_rect.center = (SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.05) # same placement as settings button
+
 # game  levels
 level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
 roomlist = []
@@ -76,7 +84,9 @@ while running:
 
         start.draw(screen)
         quit.draw(screen)
+        pygame.draw.rect(screen, colours[0], settings_white_rect)
         settings.draw(screen)
+
 
 
         if start.function():
