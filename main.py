@@ -1,7 +1,7 @@
 import pygame
 
 from level_generation import level_generation
-from menu import Menu
+import menu
 from Buttons import Button
 from Entity_Classes import Player
 
@@ -52,7 +52,7 @@ settings_width = settings_img_hover.get_width() * 0.05 # multiplied by scale
 settings_height = settings_img_hover.get_height() * 0.05 # multiplied by scale
 
 # Calculate the white rectangle for the settings button
-settings_white_rect = pygame.Rect(0, 0, settings_width, settings_height)
+settings_white_rect = pygame.Rect(0, 0, settings_width - 2, settings_height - 2)
 settings_white_rect.center = (SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.05) # same placement as settings button
 
 # game  levels
@@ -80,7 +80,7 @@ while running:
         screen.fill(colours[1])
 
         # Function to display menu
-        Menu(SCREEN_WIDTH, SCREEN_HEIGHT, clock, colours, screen, fonts)
+        menu.Menu(SCREEN_WIDTH, SCREEN_HEIGHT, clock, colours, screen, fonts)
 
         start.draw(screen)
         quit.draw(screen)
@@ -106,6 +106,10 @@ while running:
         if settings.function():
             game_state = "settings"
 
+
+
+
+
     elif game_state == "playing":
 
         screen.fill(colours[1])
@@ -124,8 +128,17 @@ while running:
     elif game_state == "settings":
 
         screen.fill("black")
-        coming_soon = TITLE_FONT.render("Settings: Coming Soon", True, colours[0])
-        screen.blit(coming_soon, (SCREEN_WIDTH / 2 - coming_soon.get_width() / 2, 100))
+
+        settings_screen = menu.Settings(SCREEN_WIDTH, SCREEN_HEIGHT, clock, colours, screen, fonts)
+        settings_buttons = settings_screen.settings_buttons(SCREEN_WIDTH, SCREEN_HEIGHT,screen)
+
+        if (settings_buttons == 'menu'): # if the back button is pressed, menu is returned
+            game_state = "menu"
+
+        #add more settings buttons later, after camera
+
+
+
 
 
 
