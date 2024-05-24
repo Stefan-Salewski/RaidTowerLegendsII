@@ -26,6 +26,7 @@ class Player(Entity):
         self.cancollide = cancollide
         self.player = pygame.Rect((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 50, 50)
         self.player_speed = 5
+
         print("Player initialized")
 
     def player_movement(self,screen_instance):
@@ -44,16 +45,20 @@ class Player(Entity):
             player_moving.x -= 1
         if (key[pygame.K_d]) or (key[pygame.K_RIGHT]):
             player_moving.x += 1
+
         # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
         if (player_moving.length() > 0):  # if there's movement basically.
             player_moving = player_moving.normalize() * self.player_speed  # multiplying unit vector by speed
-            camera_offset = (-1 * (player_moving.normalize() * self.player_speed)) # making sure camera follows
 
-        self.player.move_ip(player_moving.x, player_moving.y)  # moving it by whatever the new vectors coordinates are
+            # Camera
+            camera_offset = (-1 * (player_moving.normalize() * self.player_speed)) # setting camera offset
 
+            self.player.move_ip(player_moving.x, player_moving.y)  # moving it by whatever the new vectors coordinates are
 
-        # Making sure our player stays in screen, might remove later, also different ways of doing this.
-        self.player.clamp_ip(screen_instance.get_rect())
+            # Making sure our player stays in screen, might remove later, also different ways of doing this.
+            self.player.clamp_ip(screen_instance.get_rect())
+
+            return (camera_offset)
 
     def shoot_bullets(self):
         pass # coming soon

@@ -74,7 +74,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    if game_state == "menu":
+    if (game_state == "menu"):
 
         # fill the screen with a color to wipe away anything from last frame
         screen.fill(colours[1])
@@ -100,17 +100,17 @@ while running:
             roomlist = level_generator.generate_level(10, roomlist, 0, [],[])
             game_state = "playing"
 
-        if quit.function():
+        elif quit.function():
             running = False
 
-        if settings.function():
+        elif settings.function():
             game_state = "settings"
 
 
 
 
 
-    elif game_state == "playing":
+    elif (game_state == "playing"):
 
         screen.fill(colours[1])
 
@@ -118,14 +118,22 @@ while running:
         for room in roomlist:
             for wall in room:
                 pygame.draw.rect(screen, colours[0], wall)
+                # move this rect ip by camera_offset x and camera_offset y depending on the return statement from player_movement
 
+
+        # Show fps during gameplay
         fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[2])
         screen.blit(fps_counter, (0 , 0 ))
 
-        # add player movement and other game logic here
+        # add player movement and other game stuff here
         player_entity.player_movement(screen)
 
-    elif game_state == "settings":
+
+
+
+
+
+    elif (game_state == "settings"):
 
         screen.fill("black")
 
