@@ -69,3 +69,4 @@ camera movement, settings,entities,health bars,powerups,enemy types,pause button
 
  Make it so that player spawns in the centre of the first level.
  Make start,settings,exit buttons all a part of menu initialization.
+ #

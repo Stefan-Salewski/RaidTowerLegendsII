@@ -43,4 +43,4 @@ class Settings(Menu):
         back.draw(screen)
         # if the back button is pressed, menu is returned
         if (back.function() == True):
-            return "menu"
+            return ("menu")
