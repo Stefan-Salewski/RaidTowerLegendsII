@@ -58,6 +58,8 @@ offset = pygame.math.Vector2()
 player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT) # dimensions are automatically halved in the function
 
 main_camera = Camera()
+#test of the update camera
+#main_camera.update_camera(pygame.math.Vector2(300,100))
 
 # Load the menu music
 pygame.mixer.init()
@@ -118,7 +120,8 @@ while running:
 
         # add player movement and other game logic here
         player_entity.player_movement(screen)
-        main_camera.update_camera(player_entity.offset)
+        #setting camera offset
+        #main_camera.update_camera(player_entity.offset)
 
     elif game_state == "settings":
 
