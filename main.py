@@ -102,6 +102,13 @@ while running:
         if settings.function():
             game_state = "settings"
 
+    elif game_state == "settings":
+
+        screen.fill("black")
+        coming_soon = TITLE_FONT.render("Settings: Coming Soon", True, colours[0])
+        screen.blit(coming_soon, (SCREEN_WIDTH / 2 - coming_soon.get_width() / 2, 100))
+
+
     elif game_state == "playing":
 
         screen.fill(colours[1])
@@ -121,13 +128,7 @@ while running:
         # add player movement and other game logic here
         player_entity.player_movement(screen)
         #setting camera offset
-        #main_camera.update_camera(player_entity.offset)
-
-    elif game_state == "settings":
-
-        screen.fill("black")
-        coming_soon = TITLE_FONT.render("Settings: Coming Soon", True, colours[0])
-        screen.blit(coming_soon, (SCREEN_WIDTH / 2 - coming_soon.get_width() / 2, 100))
+        main_camera.update_camera(player_entity.offset)
 
 
 
