@@ -64,4 +64,9 @@ bounciness. So maybe some walls are bouncy. idk though might be hard to code
 --> health bar
 
 May-21, next steps:
-camera movement, settings,entities,healthbars,powerups,enemy types,pause button
+camera movement, settings,entities,health bars,powerups,enemy types,pause button
+
+
+ Make it so that player spawns in the centre of the first level.
+ Make start,settings,exit buttons all a part of menu initialization.
+ #
