@@ -4,6 +4,7 @@ from level_generation import level_generation
 from menu import Menu
 from Buttons import Button
 from Entity_Classes import Player
+from Entity_Classes import Wall
 
 # pygame setup
 pygame.init()
@@ -103,7 +104,7 @@ while running:
         # draw the rooms
         for room in roomlist:
             for wall in room:
-                pygame.draw.rect(screen, colours[0], wall)
+                pygame.draw.rect(screen, colours[0], wall.get_rect())
 
         fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[2])
         screen.blit(fps_counter, (0 , 0 ))

@@ -67,5 +67,17 @@ class Bullet(Entity):
 class Enemy(Entity):
     pass
 class Wall(Entity):
+    def __init__(self,x,y, width, height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.create_rect()
+    def create_rect(self):
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        return self.rect
+
+    def get_rect(self):
+        return self.rect
     pass
 
