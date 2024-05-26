@@ -1,5 +1,6 @@
 import pygame
 
+from camera import Camera
 from level_generation import level_generation
 from menu import Menu
 from Buttons import Button
@@ -56,6 +57,8 @@ offset = pygame.math.Vector2()
 # Player initialization
 player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT) # dimensions are automatically halved in the function
 
+main_camera = Camera()
+
 # Load the menu music
 pygame.mixer.init()
 pygame.mixer.music.load("Menu - Spaceship Hangar.wav")
@@ -104,13 +107,18 @@ while running:
         # draw the rooms
         for room in roomlist:
             for wall in room:
-                pygame.draw.rect(screen, colours[0], wall.get_rect())
+                rect_surface = pygame.Surface(wall.get_rect().size, pygame.SRCALPHA)
+                rect_surface.fill(colours[0])
+                wall_offset = wall.get_rect().topleft + main_camera.offset
+                screen.blit(rect_surface, wall_offset)
+                #pygame.draw.rect(screen, colours[0], wall.get_rect())
 
         fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[2])
         screen.blit(fps_counter, (0 , 0 ))
 
         # add player movement and other game logic here
         player_entity.player_movement(screen)
+        main_camera.update_camera(player_entity.offset)
 
     elif game_state == "settings":
 

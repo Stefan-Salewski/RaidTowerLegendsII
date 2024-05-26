@@ -4,6 +4,7 @@
 #Can be called from main to generate a list of rooms
 #Stefan Salewski
 #*************************************************
+import pygame.math
 
 from Entity_Classes import Wall
 import random
@@ -29,43 +30,38 @@ class level_generation():
         topleft = Wall(x, y, 400, 10)
         topmid = Wall(x + 400, y, 200, 10)
         topright = Wall(x + 600, y + 200, 400, 10)
-        #topleft = self.pygame.Rect(x, y,400,10)
-        #topmid = self.pygame.Rect(x + 400, y, 200, 10)
-        #topright = self.pygame.Rect(x + 600, y, 400, 10)
+
         room.append(topleft)
         room.append(topmid)
         room.append(topright)
+
         #left wall
         lefttop = Wall(x, y, 10, 400)
         leftdoor = Wall(x, y + 400, 10, 200)
         leftbot = Wall(x, y + 600, 10, 400)
-        #lefttop = self.pygame.Rect(x, y, 10, 400)
-        #leftdoor = self.pygame.Rect(x, y + 400, 10, 200)
-        #leftbot = self.pygame.Rect(x, y + 600, 10, 400)
 
         room.append(lefttop)
         room.append(leftdoor)
         room.append(leftbot)
+
         #bottom wall
         botleft = Wall(x, y + 1000, 400, 10)
         botdoor = Wall(x + 400, y + 1000, 200, 10)
         botright = Wall(x + 600, y + 1000, 400, 10)
-        #botleft = self.pygame.Rect(x, y + 1000, 400, 10)
-        #botdoor = self.pygame.Rect(x + 400, y + 1000, 200, 10)
-        #botright = self.pygame.Rect(x + 600, y + 1000, 400, 10)
+
         room.append(botleft)
         room.append(botdoor)
         room.append(botright)
+
         #right wall
         righttop = Wall(x + 1000, y, 10, 400)
         rightdoor = Wall(x + 1000, y + 400, 10, 200)
         rightbot = Wall(x + 1000, y + 600, 10, 400)
-        #righttop = self.pygame.Rect(x + 1000, y, 10, 400)
-        #rightdoor = self.pygame.Rect(x + 1000, y + 400, 10, 200)
-        #rightbot = self.pygame.Rect(x + 1000, y + 600, 10, 400)
+
         room.append(righttop)
         room.append(rightdoor)
         room.append(rightbot)
+
         return room
     def edit_room(self, room):
 

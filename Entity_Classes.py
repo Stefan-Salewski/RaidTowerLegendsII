@@ -1,5 +1,6 @@
 import pygame
 import random
+import camera
 
 #COLOURS
 RED = (255,0,0)
@@ -23,6 +24,7 @@ class Player(Entity):
         self.invulnerability = invulnerability
         self.health = health
         self.damage = damage
+        self.offset = pygame.math.Vector2()
         self.cancollide = cancollide
         self.player = pygame.Rect((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 50, 50)
         self.player_speed = 5
@@ -47,7 +49,7 @@ class Player(Entity):
         # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
         if (player_moving.length() > 0):  # if there's movement basically.
             player_moving = player_moving.normalize() * self.player_speed  # multiplying unit vector by speed
-            camera_offset = (-1 * (player_moving.normalize() * self.player_speed)) # making sure camera follows
+            self.offset = (-1 * (player_moving.normalize() * self.player_speed)) # making sure camera follows
 
         self.player.move_ip(player_moving.x, player_moving.y)  # moving it by whatever the new vectors coordinates are
 
