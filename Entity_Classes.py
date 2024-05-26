@@ -31,7 +31,7 @@ class Player(Entity):
         print("Player initialized")
 
     def player_movement(self,screen_instance):
-        pygame.draw.rect(screen_instance, colours[5], self.player)
+        #pygame.draw.rect(screen_instance, colours[5], self.player)
 
         key = pygame.key.get_pressed()
 
@@ -64,6 +64,12 @@ class Player(Entity):
         # setting the x and y offset
         self.offset.x = self.player.centerx - self.half_w
         self.offset.y = self.player.centery - self.half_h
+
+        #convert rect to a surface and draw to the screen
+        player_surface = pygame.Surface(self.player.size)
+        player_surface.fill(colours[5])
+        screen_instance.blit(player_surface, self.player.topleft - self.offset)
+
     def shoot_bullets(self):
         pass # coming soon
     def power_up(self):
