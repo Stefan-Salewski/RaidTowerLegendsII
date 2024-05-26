@@ -55,7 +55,7 @@ class Player(Entity):
         self.player.move_ip(player_moving.x, player_moving.y)  # moving it by whatever the new vectors coordinates are
 
         # Making sure our player stays in screen, might remove later, also different ways of doing this.
-        self.player.clamp_ip(screen_instance.get_rect())
+        #self.player.clamp_ip(screen_instance.get_rect())
 
         # setting the camera based on the players position
         # getting half width and height of the window
