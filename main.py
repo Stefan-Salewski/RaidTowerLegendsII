@@ -118,7 +118,7 @@ while running:
             for wall in room:
                 rect_surface = pygame.Surface(wall.get_rect().size, pygame.SRCALPHA)
                 rect_surface.fill(colours[0])
-                wall_offset = wall.get_rect().topleft + main_camera.offset
+                wall_offset = wall.get_rect().topleft - main_camera.offset
                 screen.blit(rect_surface, wall_offset)
                 #pygame.draw.rect(screen, colours[0], wall.get_rect())
 

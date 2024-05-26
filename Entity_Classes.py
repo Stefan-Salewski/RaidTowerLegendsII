@@ -49,14 +49,21 @@ class Player(Entity):
         # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
         if (player_moving.length() > 0):  # if there's movement basically.
             player_moving = player_moving.normalize() * self.player_speed  # multiplying unit vector by speed
-            self.offset = (-1 * (player_moving.normalize() * self.player_speed)) # making sure camera follows
+
+            #self.offset = (-1 * (player_moving.normalize() * self.player_speed)) # making sure camera follows
 
         self.player.move_ip(player_moving.x, player_moving.y)  # moving it by whatever the new vectors coordinates are
-
 
         # Making sure our player stays in screen, might remove later, also different ways of doing this.
         self.player.clamp_ip(screen_instance.get_rect())
 
+        # setting the camera based on the players position
+        # getting half width and height of the window
+        self.half_w = pygame.display.get_window_size()[0] // 2
+        self.half_h = pygame.display.get_window_size()[1] // 2
+        # setting the x and y offset
+        self.offset.x = self.player.centerx - self.half_w
+        self.offset.y = self.player.centery - self.half_h
     def shoot_bullets(self):
         pass # coming soon
     def power_up(self):
