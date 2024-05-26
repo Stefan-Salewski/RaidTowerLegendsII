@@ -29,7 +29,7 @@ class level_generation():
         #top wall
         topleft = Wall(x, y, 400, 10)
         topmid = Wall(x + 400, y, 200, 10)
-        topright = Wall(x + 600, y + 200, 400, 10)
+        topright = Wall(x + 600, y, 400, 10)
 
         room.append(topleft)
         room.append(topmid)
