@@ -12,8 +12,8 @@ pygame.init()
 
 # window settings
 pygame.display.set_caption('Raid Tower Legends II: Mighty Morphin Edition©')
-SCREEN_WIDTH = 700
-SCREEN_HEIGHT = 700
+SCREEN_WIDTH = 1920
+SCREEN_HEIGHT = 1080
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # clock

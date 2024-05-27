@@ -23,49 +23,55 @@ class level_generation():
         self.GREEN = (0, 255, 0)
         print("HELLO WORLD")
 
-    def create_room(self, x, y):
+    def create_room(self, x, y, door):
         room = []
 
         #top wall
         topleft = Wall(x, y, 400, 10)
-        topmid = Wall(x + 400, y, 200, 10)
         topright = Wall(x + 600, y, 400, 10)
 
-        room.append(topleft)
-        room.append(topmid)
         room.append(topright)
+        room.append(topleft)
+        #i = 1
+        if (door != 0):
+            topdoor = Wall(x + 400, y, 200, 10)
+            room.append(topdoor)
 
         #left wall
         lefttop = Wall(x, y, 10, 400)
-        leftdoor = Wall(x, y + 400, 10, 200)
         leftbot = Wall(x, y + 600, 10, 400)
-
         room.append(lefttop)
-        room.append(leftdoor)
         room.append(leftbot)
+
+        #index = 4
+        if (door != 1):
+            leftdoor = Wall(x, y + 400, 10, 200)
+            room.append(leftdoor)
 
         #bottom wall
         botleft = Wall(x, y + 1000, 400, 10)
-        botdoor = Wall(x + 400, y + 1000, 200, 10)
         botright = Wall(x + 600, y + 1000, 400, 10)
-
         room.append(botleft)
-        room.append(botdoor)
         room.append(botright)
+        if (door != 2):
+            botdoor = Wall(x + 400, y + 1000, 200, 10)
+            room.append(botdoor)
 
         #right wall
         righttop = Wall(x + 1000, y, 10, 400)
-        rightdoor = Wall(x + 1000, y + 400, 10, 200)
         rightbot = Wall(x + 1000, y + 600, 10, 400)
-
         room.append(righttop)
-        room.append(rightdoor)
         room.append(rightbot)
 
-        return room
-    def edit_room(self, room):
+        if (door != 3):
+            rightdoor = Wall(x + 1000, y + 400, 10, 200)
+            room.append(rightdoor)
 
-        return
+        print(len(room))
+        return room
+    def edit_room(self, room, wall_to_edit_index):
+        room.pop(wall_to_edit_index)
+        return room
 
 #lets go we can draw stuff in classes
     def generate_level(self, numrooms, roomlist, iteration, prevx, prevy):
@@ -83,37 +89,40 @@ class level_generation():
 
                 # Determine the new room position based on the random number
                 if randomnum == 0:  # up
-                    newroom = self.create_room(prevx[len(prevx) - 1], prevy[len(prevy) - 1] + 1000)
+                    newroom = self.create_room(prevx[len(prevx) - 1], prevy[len(prevy) - 1] + 1000, randomnum)
                     newx = prevx[len(prevx) - 1]
                     newy = prevy[len(prevy) - 1] + 1000
+                    rooms[-1] = self.edit_room(rooms[-1], 1)
                 elif randomnum == 1:  # left
-                    newroom = self.create_room(prevx[len(prevx) - 1] - 1000, prevy[len(prevy) - 1])
+                    newroom = self.create_room(prevx[len(prevx) - 1] - 1000, prevy[len(prevy) - 1], randomnum)
                     newx = prevx[len(prevx) - 1] - 1000
                     newy = prevy[len(prevy) - 1]
+                    rooms[-1] = self.edit_room(rooms[-1], 4)
                 elif randomnum == 2:  # down
-                    newroom = self.create_room(prevx[len(prevx) - 1], prevy[len(prevy) - 1] - 1000)
+                    newroom = self.create_room(prevx[len(prevx) - 1], prevy[len(prevy) - 1] - 1000, randomnum)
                     newx = prevx[len(prevx) - 1]
                     newy = prevy[len(prevy) - 1] - 1000
+                    rooms[-1] = self.edit_room(rooms[-1], 1)
                 elif randomnum == 3:  # right
-                    newroom = self.create_room(prevx[len(prevx) - 1] + 1000, prevy[len(prevy) - 1])
+                    newroom = self.create_room(prevx[len(prevx) - 1] + 1000, prevy[len(prevy) - 1], randomnum)
                     newx = prevx[len(prevx) - 1] + 1000
                     newy = prevy[len(prevy) - 1]
-
+                    rooms[-1] = self.edit_room(rooms[-1], 0)
                 occupied = False
-
+                #checking if the place we want to generate a new room in already has one
                 for i in range(len(prevx)):
                     if newx == prevx[i] and newy == prevy[i]:
                         occupied = True
                         break
-
+                #otherwise we can make a new room
                 if not occupied:
                     prevx.append(newx)
                     prevy.append(newy)
                     rooms.append(newroom)
                     generating = False
-
+        #storing the room along with the previous x and y
         else:
-            rooms.append(self.create_room(0, 0))
+            rooms.append(self.create_room(0, 0, 4))
             prevx.append(0)
             prevy.append(0)
 
