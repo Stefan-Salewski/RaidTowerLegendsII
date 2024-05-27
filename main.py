@@ -1,3 +1,5 @@
+import random
+
 import pygame
 
 from camera import Camera
@@ -93,7 +95,7 @@ while running:
             pygame.mixer.music.play(-1)  # Play the music in a loop
 
             # level generation
-            roomlist = level_generator.generate_level(10, roomlist, 0, [],[])
+            roomlist = level_generator.generate_level(10, roomlist, 0, [],[], random.randint(0, 3))
             game_state = "playing"
 
         if quit.function():
