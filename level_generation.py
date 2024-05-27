@@ -4,7 +4,6 @@
 #Can be called from main to generate a list of rooms
 #Stefan Salewski
 #*************************************************
-import pygame.math
 
 from Entity_Classes import Wall
 import random
@@ -63,9 +62,6 @@ class level_generation():
             room.append(rightdoor)
 
         return room
-    def edit_room(self, room):
-
-        return room
 
 #lets go we can draw stuff in classes
     def generate_level(self, numrooms, roomlist, iteration, prevx, prevy, randomnum):
@@ -121,9 +117,11 @@ class level_generation():
                     prevy.append(newy)
                     rooms.append(newroom)
                     generating = False
-
+            #this should only happen with a layout that cant make more rooms
+            #if it does then we can end it early
             if attempts == max_attempts:
-                raise RuntimeError("Maximum attempts reached. Unable to place a new room.")
+
+                return rooms
         else:
             nextrandomnum = random.randint(0, 3)
             rooms.append(self.create_room(0, 0, 4, nextrandomnum))
