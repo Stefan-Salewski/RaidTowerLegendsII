@@ -19,7 +19,7 @@ class Button():
         self.rect.center = (x,y)
         self.clicked = False
 
-    def draw(self, screen_instance):
+    def draw_button(self, screen_instance):
         # get mouse position
         pos = pygame.mouse.get_pos()
 

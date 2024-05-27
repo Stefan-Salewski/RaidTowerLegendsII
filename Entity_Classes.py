@@ -12,11 +12,11 @@ RANDOM = ((random.randint(0,255)),(random.randint(0,255)),(random.randint(0,255)
 colours = [WHITE,BLACK,RED,BLUE,GREEN,RANDOM]
 
 class Entity():
-    def __init__(self,invulnerability,health,damage,cancolide):
+    def __init__(self,invulnerability,health,damage,cancollide):
         self.invulnerability = invulnerability
         self.health = health
         self.damage = damage
-        self.cancollide = cancolide
+        self.cancollide = cancollide
         print("Entity spawning")
 
 class Player(Entity):

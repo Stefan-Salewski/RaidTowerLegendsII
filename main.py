@@ -15,8 +15,8 @@ pygame.init()
 
 # window settings
 pygame.display.set_caption('Raid Tower Legends II: Mighty Morphin Edition©')
-SCREEN_WIDTH = 700
-SCREEN_HEIGHT = 700
+SCREEN_WIDTH = 1920
+SCREEN_HEIGHT = 1080
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # clock
@@ -90,10 +90,10 @@ while running:
         # Function to display menu
         Menu(SCREEN_WIDTH, SCREEN_HEIGHT, clock, colours, screen, fonts)
 
-        start.draw(screen)
-        quit.draw(screen)
+        start.draw_button(screen)
+        quit.draw_button(screen)
         pygame.draw.rect(screen, colours[0], settings_white_rect)
-        settings.draw(screen)
+        settings.draw_button(screen)
 
 
         if start.function():
