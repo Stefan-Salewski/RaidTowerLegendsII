@@ -5,6 +5,7 @@ import pygame
 from camera import Camera
 from level_generation import level_generation
 from menu import Menu
+import menu
 from Buttons import Button
 from Entity_Classes import Player
 from Entity_Classes import Wall
@@ -14,8 +15,8 @@ pygame.init()
 
 # window settings
 pygame.display.set_caption('Raid Tower Legends II: Mighty Morphin Edition©')
-SCREEN_WIDTH = 1920
-SCREEN_HEIGHT = 1080
+SCREEN_WIDTH = 700
+SCREEN_HEIGHT = 700
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # clock
@@ -50,6 +51,13 @@ settings_img_hover = pygame.image.load("settings_hover.png").convert_alpha()
 start = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5, start_img, start_img_hover, 0.7)
 quit = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.8, quit_img, quit_img_hover,0.7)
 settings = Button(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.05, settings_img,settings_img_hover,0.1)
+# Get the dimensions of the settings button image
+settings_width = settings_img_hover.get_width() * 0.05 # multiplied by scale
+settings_height = settings_img_hover.get_height() * 0.05 # multiplied by scale
+
+# Calculate the white rectangle for the settings button
+settings_white_rect = pygame.Rect(0, 0, settings_width - 2, settings_height - 2)
+settings_white_rect.center = (SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.05) # same placement as settings button
 
 # game  levels
 level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -84,6 +92,7 @@ while running:
 
         start.draw(screen)
         quit.draw(screen)
+        pygame.draw.rect(screen, colours[0], settings_white_rect)
         settings.draw(screen)
 
 
@@ -107,8 +116,12 @@ while running:
     elif game_state == "settings":
 
         screen.fill("black")
-        coming_soon = TITLE_FONT.render("Settings: Coming Soon", True, colours[0])
-        screen.blit(coming_soon, (SCREEN_WIDTH / 2 - coming_soon.get_width() / 2, 100))
+
+        settings_screen = menu.Settings(SCREEN_WIDTH, SCREEN_HEIGHT, clock, colours, screen, fonts)
+        settings_buttons = settings_screen.settings_buttons(SCREEN_WIDTH, SCREEN_HEIGHT, screen)
+
+        if (settings_buttons == "menu"):
+            game_state = "menu"
 
 
     elif game_state == "playing":
