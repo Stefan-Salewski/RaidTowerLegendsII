@@ -56,6 +56,7 @@ class level_generation():
             rightdoor = Wall(x + 1000, y + 400, 10, 200)
             room.append(rightdoor)
 
+
         return room
 
 #lets go we can draw stuff in classes
@@ -123,8 +124,12 @@ class level_generation():
             prevy.append(0)
 
         if iteration == numrooms - 1:
+
             return rooms
         else:
             return self.generate_level(numrooms, rooms, iteration + 1, prevx, prevy, nextrandomnum)
 
-
+    def populate_room(self, roomlist):
+        for room in roomlist:
+            for wall in room:
+                print(wall)

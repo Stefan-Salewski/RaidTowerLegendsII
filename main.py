@@ -61,7 +61,7 @@ settings_white_rect.center = (SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.05) # same 
 
 # game  levels
 level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
-roomlist = []
+room_list = []
 offset = pygame.math.Vector2()
 
 # Player initialization
@@ -105,7 +105,10 @@ while running:
             pygame.mixer.music.play(-1)  # Play the music in a loop
 
             # level generation
-            roomlist = level_generator.generate_level(10, roomlist, 0, [],[], random.randint(0, 3))
+            room_list = level_generator.generate_level(10, room_list, 0, [], [], random.randint(0, 3))
+            #spawn enemies and treasure in rooms
+            level_generator.populate_room(room_list)
+
             game_state = "playing"
 
         if quit.function():
@@ -130,7 +133,7 @@ while running:
         screen.fill(colours[1])
 
         # draw the rooms
-        for room in roomlist:
+        for room in room_list:
             for wall in room:
                 rect_surface = pygame.Surface(wall.get_rect().size, pygame.SRCALPHA)
                 rect_surface.fill(colours[0])
