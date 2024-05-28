@@ -9,6 +9,7 @@ import menu
 from Buttons import Button
 from Entity_Classes import Player
 from Entity_Classes import Wall
+from Entity_Classes import Enemy
 
 # pygame setup
 pygame.init()
@@ -129,8 +130,9 @@ while running:
 
 
     elif game_state == "playing":
-
+        #im normal during the day but at night turn to a sigma
         screen.fill(colours[1])
+        Enemy()
 
         # draw the rooms
         for room in room_list:
