@@ -13,6 +13,7 @@ colours = [WHITE,BLACK,RED,BLUE,GREEN,RANDOM]
 
 class Entity():
     def __init__(self,invulnerability,health,damage,cancollide):
+        #invulnerability should be a true/false toggle, walls should be true for example
         self.invulnerability = invulnerability
         self.health = health
         self.damage = damage
@@ -81,9 +82,23 @@ class Player(Entity):
 class Bullet(Entity):
     pass
 class Enemy(Entity):
-    pass
+    def __init__(self, health, damage, speed, cancollide, x, y, width, height):
+        self.invulnerability = True
+        self.health = health
+        self.damage = damage
+        self.speed = speed
+        self.cancollide = cancollide
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.surface = pygame.Surface(self.rect.size)
+        self.mask = pygame.mask.from_surface(self.surface)
+
 class Wall(Entity):
     def __init__(self,x,y, width, height):
+        self.invulnerability = True
         self.x = x
         self.y = y
         self.width = width
