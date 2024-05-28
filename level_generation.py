@@ -15,16 +15,11 @@ class level_generation():
         self.height = SCREEN_HEIGHT
         self.screen = screen
         self.pygame = pygame_instance
-        self.RED = (255, 0, 0)
-        self.WHITE = (255, 255, 255)
-        self.BLACK = (0, 0, 0)
-        self.BLUE = (0, 0, 255)
-        self.GREEN = (0, 255, 0)
-        print("HELLO WORLD")
 
-    def create_room(self, x, y, prevdoor, door):
+    def create_room(self, x, y, prevdoor, door, iteration, numrooms):
         room = []
-
+        if iteration == numrooms - 1:
+            door = -1
         # Top wall
         topleft = Wall(x, y, 400, 10)
         topright = Wall(x + 600, y, 400, 10)
@@ -68,7 +63,6 @@ class level_generation():
         iteration = iteration
         prevx = prevx
         prevy = prevy
-
         rooms = roomlist
         if len(rooms) > 0:
             generating = True
@@ -112,7 +106,7 @@ class level_generation():
                     if any(checkx == x and checky == y for x, y in zip(prevx, prevy)):
                         continue  # Skip this iteration if the next position is occupied
 
-                    newroom = self.create_room(newx, newy, randomnum, nextrandomnum)
+                    newroom = self.create_room(newx, newy, randomnum, nextrandomnum, iteration, numrooms)
                     prevx.append(newx)
                     prevy.append(newy)
                     rooms.append(newroom)
@@ -124,7 +118,7 @@ class level_generation():
                 return rooms
         else:
             nextrandomnum = random.randint(0, 3)
-            rooms.append(self.create_room(0, 0, 4, nextrandomnum))
+            rooms.append(self.create_room(0, 0, 4, nextrandomnum, iteration, numrooms))
             prevx.append(0)
             prevy.append(0)
 
