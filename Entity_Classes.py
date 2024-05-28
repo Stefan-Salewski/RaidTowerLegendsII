@@ -28,6 +28,8 @@ class Player(Entity):
         self.cancollide = cancollide
         self.player = pygame.Rect((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 50, 50)
         self.player_speed = 5
+        self.surface = pygame.Surface(self.player.size)
+        self.mask = pygame.mask.from_surface(self.surface)
         print("Player initialized")
 
     def player_movement(self,screen_instance):
@@ -66,9 +68,8 @@ class Player(Entity):
         self.offset.y = self.player.centery - self.half_h
 
         #convert rect to a surface and draw to the screen
-        player_surface = pygame.Surface(self.player.size)
-        player_surface.fill(colours[5])
-        screen_instance.blit(player_surface, self.player.topleft - self.offset)
+        self.surface.fill(colours[5])
+        screen_instance.blit(self.surface, self.player.topleft - self.offset)
 
     def shoot_bullets(self):
         pass # coming soon
@@ -87,10 +88,9 @@ class Wall(Entity):
         self.y = y
         self.width = width
         self.height = height
-        self.create_rect()
-    def create_rect(self):
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
-        return self.rect
+        self.surface = pygame.Surface(self.rect.size)
+        self.mask = pygame.mask.from_surface(self.surface)
 
     def get_rect(self):
         return self.rect

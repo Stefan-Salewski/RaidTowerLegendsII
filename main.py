@@ -15,8 +15,8 @@ pygame.init()
 
 # window settings
 pygame.display.set_caption('Raid Tower Legends II: Mighty Morphin Edition©')
-SCREEN_WIDTH = 1920
-SCREEN_HEIGHT = 1080
+SCREEN_WIDTH = 700
+SCREEN_HEIGHT = 700
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # clock
@@ -74,6 +74,7 @@ main_camera = Camera()
 # Load the menu music
 pygame.mixer.init()
 pygame.mixer.music.load("Menu - Spaceship Hangar.wav")
+pygame.mixer.music.set_volume(0)
 pygame.mixer.music.play(-1)  # Play the music in a loop
 
 while running:
@@ -135,6 +136,13 @@ while running:
                 rect_surface.fill(colours[0])
                 wall_offset = wall.get_rect().topleft - main_camera.offset
                 screen.blit(rect_surface, wall_offset)
+
+                #test collision detection, the hit boxes are waaay off
+                #i think its because of the camera offset
+                #adding or subtracing the camera offset doesnt fix, nothing a good brainstorm cant solve
+                collision_offset = (player_entity.player.x - wall.get_rect().x), (player_entity.player.y - wall.get_rect().y)
+                if player_entity.mask.overlap(wall.mask, collision_offset):
+                    print("hit")
                 #pygame.draw.rect(screen, colours[0], wall.get_rect())
 
         fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[2])
@@ -144,7 +152,6 @@ while running:
         player_entity.player_movement(screen)
         #setting camera offset
         main_camera.update_camera(player_entity.offset)
-
 
 
     # flip the display to put your work on screen
