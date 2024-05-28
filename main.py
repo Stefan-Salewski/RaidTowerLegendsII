@@ -140,7 +140,7 @@ while running:
                 #test collision detection, the hit boxes are waaay off
                 #i think its because of the camera offset
                 #adding or subtracing the camera offset doesnt fix, nothing a good brainstorm cant solve
-                collision_offset = (player_entity.player.x - wall.get_rect().x), (player_entity.player.y - wall.get_rect().y)
+                collision_offset = (wall.get_rect().x - player_entity.player.x ), (wall.get_rect().y - player_entity.player.y )
                 if player_entity.mask.overlap(wall.mask, collision_offset):
                     print("hit")
                 #pygame.draw.rect(screen, colours[0], wall.get_rect())
