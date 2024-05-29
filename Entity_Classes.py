@@ -31,6 +31,7 @@ class Player(Entity):
         self.player_speed = 5
         self.surface = pygame.Surface(self.player.size)
         self.mask = pygame.mask.from_surface(self.surface)
+
         print("Player initialized")
 
     def player_movement(self,screen_instance):
@@ -72,10 +73,14 @@ class Player(Entity):
         self.surface.fill(colours[5])
         screen_instance.blit(self.surface, self.player.topleft - self.offset)
 
+        return player_moving
     def shoot_bullets(self):
         pass # coming soon
     def power_up(self):
         pass # coming soon
+
+    def return_movement_vector(self):
+        return
 
 
 

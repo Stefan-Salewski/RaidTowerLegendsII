@@ -132,7 +132,6 @@ while running:
     elif game_state == "playing":
         #im normal during the day but at night turn to a sigma
         screen.fill(colours[1])
-        Enemy()
 
         # draw the rooms
         for room in room_list:
@@ -145,13 +144,15 @@ while running:
                 #collision
                 collision_offset = (wall.get_rect().x - player_entity.player.x ), (wall.get_rect().y - player_entity.player.y )
                 if player_entity.mask.overlap(wall.mask, collision_offset):
-                    print("hit")
+                    player_entity.player.x += -player_vector.x
+                    player_entity.player.y += -player_vector.y
+                    print(player_vector)
 
         fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[2])
         screen.blit(fps_counter, (0 , 0 ))
 
         # add player movement and other game logic here
-        player_entity.player_movement(screen)
+        player_vector = player_entity.player_movement(screen)
         #setting camera offset
         main_camera.update_camera(player_entity.offset)
 
