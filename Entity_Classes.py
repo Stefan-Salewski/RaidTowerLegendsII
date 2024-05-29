@@ -101,7 +101,7 @@ class Enemy(Entity):
         self.surface = pygame.Surface(self.rect.size)
         self.mask = pygame.mask.from_surface(self.surface)
 
-    def enemy_movement(self,screen_instance, player_ref):
+    def enemy_movement(self,screen_instance, player_ref, camera_offset):
 
         enemy_moving = pygame.math.Vector2()  # creating a vector for enemy movement
 
@@ -112,8 +112,9 @@ class Enemy(Entity):
         self.rect.move_ip(enemy_moving.x, enemy_moving.y)  # moving it by whatever the new vectors coordinates are
 
         #convert rect to a surface and draw to the screen
-        self.surface.fill(colours[5])
-        screen_instance.blit(self.surface, self.rect.topleft)
+        self.surface.fill(colours[2])
+        offset = self.surface.get_rect().topleft - camera_offset
+        screen_instance.blit(self.surface, offset)
 
         return enemy_moving
 

@@ -38,14 +38,6 @@ class level_generation():
             leftdoor = Wall(x, y + 400, 10, 200)
             room.append(leftdoor)
 
-        # Bottom wall
-        botleft = Wall(x, y + 1000, 400, 10)
-        botright = Wall(x + 600, y + 1000, 400, 10)
-        room.append(botleft)
-        room.append(botright)
-        if prevdoor != 2 and door != 0:
-            botdoor = Wall(x + 400, y + 1000, 200, 10)
-            room.append(botdoor)
 
         # Right wall
         righttop = Wall(x + 1000, y, 10, 400)
@@ -55,7 +47,15 @@ class level_generation():
         if prevdoor != 1 and door != 3:
             rightdoor = Wall(x + 1000, y + 400, 10, 200)
             room.append(rightdoor)
+        # Bottom wall
+        if prevdoor != 2 and door != 0:
+            botdoor = Wall(x + 400, y + 1000, 200, 10)
+            room.append(botdoor)
+        botleft = Wall(x, y + 1000, 400, 10)
+        botright = Wall(x + 600, y + 1000, 400, 10)
 
+        room.append(botright)
+        room.append(botleft)
 
         return room
 
@@ -131,5 +131,9 @@ class level_generation():
 
     def populate_room(self, roomlist):
         for room in roomlist:
+            room_center_x = room[0].x + 500
+            room_center_y = room[0].y - 500
+            print("x", room_center_x, "y", room_center_y)
             for wall in room:
-                print(wall)
+                pass
+

@@ -68,6 +68,8 @@ offset = pygame.math.Vector2()
 # Player initialization
 player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT) # dimensions are automatically halved in the function
 
+temp_enemy = Enemy(100,100,5,True, 300, 300, 50, 50)
+
 main_camera = Camera()
 #test of the update camera
 #main_camera.update_camera(pygame.math.Vector2(300,100))
@@ -154,6 +156,7 @@ while running:
 
         # add player movement and other game logic here
         player_vector = player_entity.player_movement(screen)
+        temp_enemy.enemy_movement(screen, player_entity, main_camera.offset)
         #setting camera offset
         main_camera.update_camera(player_entity.offset)
 
