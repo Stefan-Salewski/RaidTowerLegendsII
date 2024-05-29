@@ -144,9 +144,10 @@ while running:
                 #collision
                 collision_offset = (wall.get_rect().x - player_entity.player.x ), (wall.get_rect().y - player_entity.player.y )
                 if player_entity.mask.overlap(wall.mask, collision_offset):
+                    #change the players position by the opposite of the movement vector
+                    #to push players away from the wall
                     player_entity.player.x += -player_vector.x
                     player_entity.player.y += -player_vector.y
-                    print(player_vector)
 
         fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[2])
         screen.blit(fps_counter, (0 , 0 ))

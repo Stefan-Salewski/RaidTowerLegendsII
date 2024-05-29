@@ -101,6 +101,22 @@ class Enemy(Entity):
         self.surface = pygame.Surface(self.rect.size)
         self.mask = pygame.mask.from_surface(self.surface)
 
+    def enemy_movement(self,screen_instance, player_ref):
+
+        enemy_moving = pygame.math.Vector2()  # creating a vector for enemy movement
+
+        # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
+        if (enemy_moving.length() > 0):  # if there's movement basically.
+            enemy_moving = enemy_moving.normalize() * self.speed  # multiplying unit vector by speed
+
+        self.rect.move_ip(enemy_moving.x, enemy_moving.y)  # moving it by whatever the new vectors coordinates are
+
+        #convert rect to a surface and draw to the screen
+        self.surface.fill(colours[5])
+        screen_instance.blit(self.surface, self.rect.topleft)
+
+        return enemy_moving
+
 class Wall(Entity):
     def __init__(self,x,y, width, height):
         self.invulnerability = True
