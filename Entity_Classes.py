@@ -91,7 +91,7 @@ class Enemy(Entity):
         self.invulnerability = True
         self.health = health
         self.damage = damage
-        self.speed = speed
+        self.enemy_speed = speed
         self.cancollide = cancollide
         self.x = x
         self.y = y
@@ -107,7 +107,7 @@ class Enemy(Entity):
 
         # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
         if (enemy_moving.length() > 0):  # if there's movement basically.
-            enemy_moving = enemy_moving.normalize() * self.speed  # multiplying unit vector by speed
+            enemy_moving = enemy_moving.normalize() * self.enemy_speed  # multiplying unit vector by speed
 
         self.rect.move_ip(enemy_moving.x, enemy_moving.y)  # moving it by whatever the new vectors coordinates are
 
