@@ -18,7 +18,24 @@ class Entity():
         self.health = health
         self.damage = damage
         self.cancollide = cancollide
+        self.offset = pygame.math.Vector2()
         print("Entity spawning")
+    def movement(self, surface, rect, movement_vector, screen_instance):
+        rect.move_ip(movement_vector.x, movement_vector.y)  # moving it by whatever the new vectors coordinates are
+        # setting the camera based on the players position
+        # getting half width and height of the window
+        half_w = pygame.display.get_window_size()[0] // 2
+        half_h = pygame.display.get_window_size()[1] // 2
+        # setting the x and y offset
+
+        self.offset.x = rect.centerx - half_w
+        self.offset.y = rect.centery - half_h
+
+        # convert rect to a surface and draw to the screen
+        surface.fill(colours[5])
+        print("TEST")
+        screen_instance.blit(surface, rect.topleft - self.offset)
+
 
 class Player(Entity):
     def __init__(self,SCREEN_WIDTH,SCREEN_HEIGHT,invulnerability = False, health = 100, damage = 0, cancollide = True):
@@ -54,29 +71,25 @@ class Player(Entity):
         if (self.player_moving.length() > 0):  # if there's movement basically.
             self.player_moving = self.player_moving.normalize() * self.player_speed  # multiplying unit vector by speed
 
-        self.player.move_ip(self.player_moving.x, self.player_moving.y)  # moving it by whatever the new vectors coordinates are
+        self.movement(self.surface, self.player, self.player_moving, screen_instance)
+        #self.player.move_ip(self.player_moving.x, self.player_moving.y)  # moving it by whatever the new vectors coordinates are
 
         # setting the camera based on the players position
         # getting half width and height of the window
-        self.half_w = pygame.display.get_window_size()[0] // 2
-        self.half_h = pygame.display.get_window_size()[1] // 2
+        #self.half_w = pygame.display.get_window_size()[0] // 2
+        #self.half_h = pygame.display.get_window_size()[1] // 2
         # setting the x and y offset
-        self.offset.x = self.player.centerx - self.half_w
-        self.offset.y = self.player.centery - self.half_h
+        #self.offset.x = self.player.centerx - self.half_w
+        #self.offset.y = self.player.centery - self.half_h
 
         #convert rect to a surface and draw to the screen
-        self.surface.fill(colours[5])
-        screen_instance.blit(self.surface, self.player.topleft - self.offset)
+        #self.surface.fill(colours[5])
+        #screen_instance.blit(self.surface, self.player.topleft - self.offset)
 
     def shoot_bullets(self):
         pass # coming soon
     def power_up(self):
         pass # coming soon
-
-    def return_movement_vector(self):
-        return
-
-
 
 class Bullet(Entity):
     pass

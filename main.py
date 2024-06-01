@@ -154,14 +154,9 @@ while running:
                 screen.blit(rect_surface, wall_offset)
 
                 # collision
-
                 collision_offset = (wall.get_rect().x - player_entity.player.x), (wall.get_rect().y - player_entity.player.y)
                 if player_entity.mask.overlap(wall.mask, collision_offset):
-                    # change the players position by the opposite of the movement vector
-                    # to push players away from the wall
                     player_entity.player.topleft = oldPlyerX, oldPlyerY
-                    #player_entity.player.x += -player_entity.player_moving.x
-                    #player_entity.player.y += -player_entity.player_moving.y
 
         #printing player cords for debug
         player_cords = REGULAR_FONT.render(str(("X:",player_entity.player.x,"Y:",player_entity.player.y)), True, colours[2])
