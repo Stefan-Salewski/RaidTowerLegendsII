@@ -31,35 +31,30 @@ class Player(Entity):
         self.player_speed = 5
         self.surface = pygame.Surface(self.player.size)
         self.mask = pygame.mask.from_surface(self.surface)
-
+        self.player_moving = pygame.math.Vector2()
         print("Player initialized")
 
     def player_movement(self,screen_instance):
         #pygame.draw.rect(screen_instance, colours[5], self.player)
 
         key = pygame.key.get_pressed()
-
-        player_moving = pygame.math.Vector2()  # creating a vector for player movement
+        self.player_moving = pygame.math.Vector2()
+         # creating a vector for player movement
 
         # setting direction of vector based on key inputs, both wasd and arrow keys work
         if (key[pygame.K_w]) or (key[pygame.K_UP]):
-            player_moving.y -= 1
+            self.player_moving.y -= 1
         if (key[pygame.K_s]) or (key[pygame.K_DOWN]):
-            player_moving.y += 1
+            self.player_moving.y += 1
         if (key[pygame.K_a]) or (key[pygame.K_LEFT]):
-            player_moving.x -= 1
+            self.player_moving.x -= 1
         if (key[pygame.K_d]) or (key[pygame.K_RIGHT]):
-            player_moving.x += 1
+            self.player_moving.x += 1
         # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
-        if (player_moving.length() > 0):  # if there's movement basically.
-            player_moving = player_moving.normalize() * self.player_speed  # multiplying unit vector by speed
+        if (self.player_moving.length() > 0):  # if there's movement basically.
+            self.player_moving = self.player_moving.normalize() * self.player_speed  # multiplying unit vector by speed
 
-            #self.offset = (-1 * (player_moving.normalize() * self.player_speed)) # making sure camera follows
-
-        self.player.move_ip(player_moving.x, player_moving.y)  # moving it by whatever the new vectors coordinates are
-
-        # Making sure our player stays in screen, might remove later, also different ways of doing this.
-        #self.player.clamp_ip(screen_instance.get_rect())
+        self.player.move_ip(self.player_moving.x, self.player_moving.y)  # moving it by whatever the new vectors coordinates are
 
         # setting the camera based on the players position
         # getting half width and height of the window
@@ -73,7 +68,6 @@ class Player(Entity):
         self.surface.fill(colours[5])
         screen_instance.blit(self.surface, self.player.topleft - self.offset)
 
-        return player_moving
     def shoot_bullets(self):
         pass # coming soon
     def power_up(self):
@@ -113,7 +107,7 @@ class Enemy(Entity):
 
         #convert rect to a surface and draw to the screen
         self.surface.fill(colours[2])
-        offset = self.surface.get_rect().topleft - camera_offset
+        offset = self.rect.topleft - camera_offset
         screen_instance.blit(self.surface, offset)
 
         return enemy_moving

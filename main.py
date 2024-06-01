@@ -68,7 +68,7 @@ offset = pygame.math.Vector2()
 # Player initialization
 player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT) # dimensions are automatically halved in the function
 
-temp_enemy = Enemy(100,100,5,True, 300, 300, 50, 50)
+temp_enemy = Enemy(100,100,5,True, 500, 300, 50, 50)
 
 main_camera = Camera()
 #test of the update camera
@@ -135,6 +135,16 @@ while running:
         #im normal during the day but at night turn to a sigma
         screen.fill(colours[1])
 
+
+
+        fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[2])
+        screen.blit(fps_counter, (0 , 0 ))
+
+        # add player movement and other game logic here
+        oldPlyerX, oldPlyerY = player_entity.player.topleft
+        player_entity.player_movement(screen)
+        temp_enemy.enemy_movement(screen, player_entity,main_camera.offset)
+
         # draw the rooms
         for room in room_list:
             for wall in room:
@@ -143,20 +153,21 @@ while running:
                 wall_offset = wall.get_rect().topleft - main_camera.offset
                 screen.blit(rect_surface, wall_offset)
 
-                #collision
-                collision_offset = (wall.get_rect().x - player_entity.player.x ), (wall.get_rect().y - player_entity.player.y )
+                # collision
+
+                collision_offset = (wall.get_rect().x - player_entity.player.x), (wall.get_rect().y - player_entity.player.y)
                 if player_entity.mask.overlap(wall.mask, collision_offset):
-                    #change the players position by the opposite of the movement vector
-                    #to push players away from the wall
-                    player_entity.player.x += -player_vector.x
-                    player_entity.player.y += -player_vector.y
+                    # change the players position by the opposite of the movement vector
+                    # to push players away from the wall
+                    player_entity.player.topleft = oldPlyerX, oldPlyerY
+                    #player_entity.player.x += -player_entity.player_moving.x
+                    #player_entity.player.y += -player_entity.player_moving.y
 
-        fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[2])
-        screen.blit(fps_counter, (0 , 0 ))
-
-        # add player movement and other game logic here
-        player_vector = player_entity.player_movement(screen)
-        temp_enemy.enemy_movement(screen, player_entity, main_camera.offset)
+        #printing player cords for debug
+        player_cords = REGULAR_FONT.render(str(("X:",player_entity.player.x,"Y:",player_entity.player.y)), True, colours[2])
+        screen.blit(player_cords,(screen.get_width() - 200,screen.get_height() - 50))
+        #temp_enemy_offset = temp_enemy.rect.topleft - main_camera.offset
+        #temp_enemy.enemy_movement(screen, player_entity, temp_enemy_offset)
         #setting camera offset
         main_camera.update_camera(player_entity.offset)
 
