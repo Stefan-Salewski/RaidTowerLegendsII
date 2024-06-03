@@ -19,6 +19,7 @@ class Entity():
         self.damage = damage
         self.cancollide = cancollide
         self.offset = pygame.math.Vector2()
+
         print("Entity spawning")
     def movement(self, surface, rect, movement_vector, screen_instance):
         rect.move_ip(movement_vector.x, movement_vector.y)  # moving it by whatever the new vectors coordinates are
@@ -33,7 +34,6 @@ class Entity():
 
         # convert rect to a surface and draw to the screen
         surface.fill(colours[5])
-        print("TEST")
         screen_instance.blit(surface, rect.topleft - self.offset)
 
 
@@ -44,9 +44,9 @@ class Player(Entity):
         self.damage = damage
         self.offset = pygame.math.Vector2()
         self.cancollide = cancollide
-        self.player = pygame.Rect((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 50, 50)
+        self.rect = pygame.Rect((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 50, 50)
         self.player_speed = 5
-        self.surface = pygame.Surface(self.player.size)
+        self.surface = pygame.Surface(self.rect.size)
         self.mask = pygame.mask.from_surface(self.surface)
         self.player_moving = pygame.math.Vector2()
         print("Player initialized")
@@ -71,7 +71,7 @@ class Player(Entity):
         if (self.player_moving.length() > 0):  # if there's movement basically.
             self.player_moving = self.player_moving.normalize() * self.player_speed  # multiplying unit vector by speed
 
-        self.movement(self.surface, self.player, self.player_moving, screen_instance)
+        self.movement(self.surface, self.rect, self.player_moving, screen_instance)
         #self.player.move_ip(self.player_moving.x, self.player_moving.y)  # moving it by whatever the new vectors coordinates are
 
         # setting the camera based on the players position

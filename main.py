@@ -141,7 +141,7 @@ while running:
         screen.blit(fps_counter, (0 , 0 ))
 
         # add player movement and other game logic here
-        oldPlyerX, oldPlyerY = player_entity.player.topleft
+        oldPlyerX, oldPlyerY = player_entity.rect.topleft
         player_entity.player_movement(screen)
         temp_enemy.enemy_movement(screen, player_entity,main_camera.offset)
 
@@ -154,12 +154,12 @@ while running:
                 screen.blit(rect_surface, wall_offset)
 
                 # collision
-                collision_offset = (wall.get_rect().x - player_entity.player.x), (wall.get_rect().y - player_entity.player.y)
+                collision_offset = (wall.get_rect().x - player_entity.rect.x), (wall.get_rect().y - player_entity.rect.y)
                 if player_entity.mask.overlap(wall.mask, collision_offset):
-                    player_entity.player.topleft = oldPlyerX, oldPlyerY
+                    player_entity.rect.topleft = oldPlyerX, oldPlyerY
 
         #printing player cords for debug
-        player_cords = REGULAR_FONT.render(str(("X:",player_entity.player.x,"Y:",player_entity.player.y)), True, colours[2])
+        player_cords = REGULAR_FONT.render(str(("X:", player_entity.rect.x, "Y:", player_entity.rect.y)), True, colours[2])
         screen.blit(player_cords,(screen.get_width() - 200,screen.get_height() - 50))
         #temp_enemy_offset = temp_enemy.rect.topleft - main_camera.offset
         #temp_enemy.enemy_movement(screen, player_entity, temp_enemy_offset)
