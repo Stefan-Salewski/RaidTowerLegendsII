@@ -37,8 +37,8 @@ class Settings(Menu):
 
     def settings_buttons(self,SCREEN_WIDTH,SCREEN_HEIGHT,screen):
         # Back to menu button
-        back_img = pygame.image.load("back.png").convert_alpha()
-        back_img_hover = pygame.image.load("back_hover.png").convert_alpha()
+        back_img = pygame.image.load("Art/back.png").convert_alpha()
+        back_img_hover = pygame.image.load("Art/back_hover.png").convert_alpha()
         back = Buttons.Button(SCREEN_WIDTH * 0.09, SCREEN_HEIGHT * 0.09, back_img, back_img_hover, 1)
         back.draw_button(screen)
         # if the back button is pressed, menu is returned

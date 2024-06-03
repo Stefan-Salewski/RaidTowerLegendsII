@@ -49,11 +49,14 @@ class Player(Entity):
         self.surface = pygame.Surface(self.rect.size)
         self.mask = pygame.mask.from_surface(self.surface)
         self.player_moving = pygame.math.Vector2()
+        self.mousepos = pygame.math.Vector2()
         print("Player initialized")
 
-    def player_movement(self,screen_instance):
+    def player_input(self,screen_instance):
         #pygame.draw.rect(screen_instance, colours[5], self.player)
+        self.mousepos = pygame.mouse.get_pos()
 
+        print(self.mousepos)
         key = pygame.key.get_pressed()
         self.player_moving = pygame.math.Vector2()
          # creating a vector for player movement
@@ -72,6 +75,11 @@ class Player(Entity):
             self.player_moving = self.player_moving.normalize() * self.player_speed  # multiplying unit vector by speed
 
         self.movement(self.surface, self.rect, self.player_moving, screen_instance)
+
+        shoot_dir =  (self.mousepos[0] + self.rect.center[0]) - self.rect.center[0], (self.mousepos[1] + self.rect.center[1]) - self.rect.center[1]
+
+        pygame.draw.line(screen_instance, colours[5], self.rect.center - self.offset, shoot_dir)
+
         #self.player.move_ip(self.player_moving.x, self.player_moving.y)  # moving it by whatever the new vectors coordinates are
 
         # setting the camera based on the players position
