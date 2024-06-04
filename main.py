@@ -10,14 +10,15 @@ from Buttons import Button
 from Entity_Classes import Player
 from Entity_Classes import Wall
 from Entity_Classes import Enemy
+from Entity_Classes import Bullet
 
 # pygame setup
 pygame.init()
 
 # window settings
-pygame.display.set_caption('Raid Tower Legends II: Mighty Morphin Edition©')
-SCREEN_WIDTH = 700
-SCREEN_HEIGHT = 700
+pygame.display.set_caption('Raid Tower Legends II©')
+SCREEN_WIDTH = 1600
+SCREEN_HEIGHT = 900
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # clock
@@ -48,6 +49,8 @@ quit_img_hover = pygame.image.load("Art/quit_select.png").convert_alpha()
 settings_img = pygame.image.load("Art/settings.png").convert_alpha()
 settings_img_hover = pygame.image.load("Art/settings_hover.png").convert_alpha()
 
+bullet_img = pygame.image.load('Art/bullet.png').convert_alpha()
+
 # initializing buttons outside the loop
 start = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5, start_img, start_img_hover, 0.7)
 quit = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.8, quit_img, quit_img_hover,0.7)
@@ -66,7 +69,7 @@ room_list = []
 offset = pygame.math.Vector2()
 
 # Player initialization
-player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT) # dimensions are automatically halved in the function
+player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT, bullet_img) # dimensions are automatically halved in the function
 
 temp_enemy = Enemy(100,100,5,True, 500, 300, 50, 50)
 
@@ -80,7 +83,13 @@ pygame.mixer.music.load("Sound/Music/Menu - Spaceship Hangar.wav")
 pygame.mixer.music.set_volume(0)
 pygame.mixer.music.play(-1)  # Play the music in a loop
 
+getTicksLastFrame = 0
+
 while running:
+    # getting deltatime for fire rate cooldown
+    t = pygame.time.get_ticks()
+    deltaTime = (t - getTicksLastFrame) / 1000.0
+    getTicksLastFrame = t
     # poll for events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -137,7 +146,7 @@ while running:
 
         # add player movement and other game logic here
         oldPlyerX, oldPlyerY = player_entity.rect.topleft
-        player_entity.player_input(screen)
+        player_entity.player_input(screen, deltaTime)
         temp_enemy.enemy_movement(screen, player_entity,main_camera.offset)
 
         # draw the rooms
@@ -163,7 +172,6 @@ while running:
         #In game UI drawn last so its on top of everything
         player_cords = REGULAR_FONT.render(str(("X:", player_entity.rect.x, "Y:", player_entity.rect.y)), True,colours[2])
         screen.blit(player_cords, (screen.get_width() - 200, screen.get_height() - 50))
-
         fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[2])
         screen.blit(fps_counter, (0 , 0 ))
 

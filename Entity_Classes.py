@@ -1,18 +1,21 @@
+import time
+
 import pygame
 import random
 import camera
 
 #COLOURS
-RED = (255,0,0)
-WHITE = (255,255,255)
-BLACK = (0,0,0)
-BLUE = (0,0,255)
-GREEN = (0,255,0)
-RANDOM = ((random.randint(0,255)),(random.randint(0,255)),(random.randint(0,255)))
-colours = [WHITE,BLACK,RED,BLUE,GREEN,RANDOM]
+RED = (255, 0, 0)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+BLUE = (0, 0, 255)
+GREEN = (0, 255, 0)
+RANDOM = ((random.randint(0, 255)), (random.randint(0, 255)), (random.randint(0, 255)))
+colours = [WHITE, BLACK, RED, BLUE, GREEN, RANDOM]
+
 
 class Entity():
-    def __init__(self,invulnerability,health,damage,cancollide):
+    def __init__(self, invulnerability, health, damage, cancollide):
         #invulnerability should be a true/false toggle, walls should be true for example
         self.invulnerability = invulnerability
         self.health = health
@@ -21,8 +24,9 @@ class Entity():
         self.offset = pygame.math.Vector2()
 
         print("Entity spawning")
+
     def movement(self, surface, rect, movement_vector, screen_instance):
-        rect.move_ip(movement_vector.x, movement_vector.y)  # moving it by whatever the new vectors coordinates are
+        rect.move_ip(movement_vector[0], movement_vector[1])  # moving it by whatever the new vectors coordinates are
         # setting the camera based on the players position
         # getting half width and height of the window
         half_w = pygame.display.get_window_size()[0] // 2
@@ -38,12 +42,15 @@ class Entity():
 
 
 class Player(Entity):
-    def __init__(self,SCREEN_WIDTH,SCREEN_HEIGHT,invulnerability = False, health = 100, damage = 0, cancollide = True):
+    def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, bullet_img, invulnerability=False, health=100, damage=25,firerate = 1, cancollide=True):
+        self.bullet_img = bullet_img
         self.invulnerability = invulnerability
         self.health = health
         self.damage = damage
         self.offset = pygame.math.Vector2()
         self.cancollide = cancollide
+        self.firerate = firerate
+        self.firecooldown = self.firerate
         self.rect = pygame.Rect((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 50, 50)
         self.player_speed = 5
         self.surface = pygame.Surface(self.rect.size)
@@ -52,14 +59,13 @@ class Player(Entity):
         self.mousepos = pygame.math.Vector2()
         print("Player initialized")
 
-    def player_input(self,screen_instance):
+    def player_input(self, screen_instance, deltaTime):
         #pygame.draw.rect(screen_instance, colours[5], self.player)
         self.mousepos = pygame.mouse.get_pos()
 
-        print(self.mousepos)
         key = pygame.key.get_pressed()
         self.player_moving = pygame.math.Vector2()
-         # creating a vector for player movement
+        # creating a vector for player movement
 
         # setting direction of vector based on key inputs, both wasd and arrow keys work
         if (key[pygame.K_w]) or (key[pygame.K_UP]):
@@ -76,31 +82,41 @@ class Player(Entity):
 
         self.movement(self.surface, self.rect, self.player_moving, screen_instance)
 
-        shoot_dir =  (self.mousepos[0] + self.rect.center[0]) - self.rect.center[0], (self.mousepos[1] + self.rect.center[1]) - self.rect.center[1]
-
+        #calculating the world position of the mouse, then getting the direction vector between the mouse and player
+        shoot_dir = (self.mousepos[0] + self.rect.center[0]) - self.rect.center[0], (self.mousepos[1] + self.rect.center[1]) - self.rect.center[1]
+        #drawing a line to test if the direction vector is correct
         pygame.draw.line(screen_instance, colours[5], self.rect.center - self.offset, shoot_dir)
+        #shooting behaviour
+        if pygame.mouse.get_pressed()[0] and self.firecooldown <= 0:
+            self.shoot_bullets(shoot_dir, screen_instance, 5, self.damage)
+            self.firecooldown = self.firerate
 
-        #self.player.move_ip(self.player_moving.x, self.player_moving.y)  # moving it by whatever the new vectors coordinates are
+        self.firecooldown -= 1 * deltaTime
 
-        # setting the camera based on the players position
-        # getting half width and height of the window
-        #self.half_w = pygame.display.get_window_size()[0] // 2
-        #self.half_h = pygame.display.get_window_size()[1] // 2
-        # setting the x and y offset
-        #self.offset.x = self.player.centerx - self.half_w
-        #self.offset.y = self.player.centery - self.half_h
+    def shoot_bullets(self, movement_vector, screen_instance, speed, damage):
+        new_bullet = Bullet(damage, speed, movement_vector, screen_instance, self.bullet_img)
+        pass
 
-        #convert rect to a surface and draw to the screen
-        #self.surface.fill(colours[5])
-        #screen_instance.blit(self.surface, self.player.topleft - self.offset)
-
-    def shoot_bullets(self):
-        pass # coming soon
     def power_up(self):
-        pass # coming soon
+        pass
 
 class Bullet(Entity):
-    pass
+    def __init__(self, damage, speed, movement_vector, screen_instance,image):
+        self.damage = damage
+        self.speed = speed
+        self.movement_vector = movement_vector
+        self.screen_instance = screen_instance
+        self.offset = pygame.math.Vector2()
+        self.sprite = image
+        #self.surface = pygame.Surface(self.sprite.get_size())
+
+        image_width = self.sprite.get_width()
+        image_height = self.sprite.get_height()
+        self.image = pygame.transform.scale(self.sprite, (int(image_width * 1), int(image_height * 1)))
+        self.rect = self.image.get_rect()
+        screen_instance.blit(self.image, (self.rect.x, self.rect.y))
+
+
 class Enemy(Entity):
     def __init__(self, health, damage, speed, cancollide, x, y, width, height):
         self.invulnerability = True
@@ -116,8 +132,7 @@ class Enemy(Entity):
         self.surface = pygame.Surface(self.rect.size)
         self.mask = pygame.mask.from_surface(self.surface)
 
-    def enemy_movement(self,screen_instance, player_ref, camera_offset):
-
+    def enemy_movement(self, screen_instance, player_ref, camera_offset):
         enemy_moving = pygame.math.Vector2()  # creating a vector for enemy movement
 
         # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
@@ -133,8 +148,9 @@ class Enemy(Entity):
 
         return enemy_moving
 
+
 class Wall(Entity):
-    def __init__(self,x,y, width, height):
+    def __init__(self, x, y, width, height):
         self.invulnerability = True
         self.x = x
         self.y = y
@@ -146,5 +162,5 @@ class Wall(Entity):
 
     def get_rect(self):
         return self.rect
-    pass
 
+    pass
