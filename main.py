@@ -146,7 +146,8 @@ while running:
         oldPlyerX, oldPlyerY = player_entity.rect.topleft
         player_entity.player_input(screen, deltaTime)
         temp_enemy.enemy_movement(screen, player_entity,main_camera.offset)
-
+        for bullet in bullets:
+            bullet.Update(main_camera)
         # draw the rooms
         for room in room_list:
             for wall in room:
@@ -154,14 +155,17 @@ while running:
                 rect_surface.fill(colours[0])
                 wall_offset = wall.get_rect().topleft - main_camera.offset
                 screen.blit(rect_surface, wall_offset)
-
+                for bullet in bullets:
+                    collision_offset = (wall.get_rect().x - bullet.rect.x), (wall.get_rect().y - bullet.rect.y)
+                    if bullet.mask.overlap(wall.mask, collision_offset):
+                        bullets.remove(bullet)
                 # collision
                 collision_offset = (wall.get_rect().x - player_entity.rect.x), (wall.get_rect().y - player_entity.rect.y)
                 if player_entity.mask.overlap(wall.mask, collision_offset):
                     player_entity.rect.topleft = oldPlyerX, oldPlyerY
+
         #bullets = player_entity.bullets
-        for bullet in bullets:
-            bullet.Update(main_camera)
+
         #printing player cords for debug
 
         #temp_enemy_offset = temp_enemy.rect.topleft - main_camera.offset

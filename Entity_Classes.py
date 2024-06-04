@@ -60,6 +60,8 @@ class Player(Entity):
         self.player_moving = pygame.math.Vector2()
         self.mousepos = pygame.math.Vector2()
         print("Player initialized")
+    def update_bullet_list(self, bullet_list):
+        self.bullets = bullet_list
 
     def player_input(self, screen_instance, deltaTime):
         #pygame.draw.rect(screen_instance, colours[5], self.player)
@@ -120,6 +122,7 @@ class Bullet(Entity):
         image_width = self.sprite.get_width()
         image_height = self.sprite.get_height()
         self.image = pygame.transform.scale(self.sprite, (int(image_width * 1), int(image_height * 1)))
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
