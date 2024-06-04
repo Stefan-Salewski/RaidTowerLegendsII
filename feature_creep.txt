@@ -3,7 +3,6 @@ Menu features:
 * 'start new run'
 'store' in roguelike games usually there's currency for permanent upgrades.
 But idk if we doin this, cause then we'd have to add save data
-
 'settings' , we'll add this button right away but initially it'll just be a coming soon page.
 
 
@@ -14,7 +13,7 @@ sound on/off (this is assuming we add sound effects for attacking enemies or som
 music on/off (this is assuming we add music to the game)
 toggle fps counter
 make an antialiasing toggle
-Make a back button
+Make a back button on settings page
 
 PAUSE BUTTON
 During game play, ability to toggle settings and quit game or restart with new run
@@ -67,6 +66,9 @@ May-21, next steps:
 camera movement, settings,entities,health bars,powerups,enemy types,pause button
 
 
- Make it so that player spawns in the centre of the first level.
- Make start,settings,exit buttons all a part of menu initialization.
- #
+Make start,settings,exit buttons all a part of menu initialization. To make code more modular.
+Make healthbars
+Make enemy movements
+Make player HUD's
+Make stat-based powerups
+Make an indicator of where you're shooting (player cannon)
