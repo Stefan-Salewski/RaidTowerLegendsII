@@ -160,9 +160,8 @@ while running:
                 if player_entity.mask.overlap(wall.mask, collision_offset):
                     player_entity.rect.topleft = oldPlyerX, oldPlyerY
         #bullets = player_entity.bullets
-        print(bullets)
         for bullet in bullets:
-            bullet.Update()
+            bullet.Update(main_camera)
         #printing player cords for debug
 
         #temp_enemy_offset = temp_enemy.rect.topleft - main_camera.offset

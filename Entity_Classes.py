@@ -25,7 +25,7 @@ class Entity():
 
         print("Entity spawning")
 
-    def movement(self, surface, rect, movement_vector, screen_instance):
+    def movement(self, surface, rect, movement_vector, screen_instance, colorfill):
         rect.move_ip(movement_vector[0], movement_vector[1])  # moving it by whatever the new vectors coordinates are
         # setting the camera based on the players position
         # getting half width and height of the window
@@ -37,7 +37,8 @@ class Entity():
         self.offset.y = rect.centery - half_h
 
         # convert rect to a surface and draw to the screen
-        surface.fill(colours[5])
+        if(colorfill):
+            surface.fill(colours[5])
         screen_instance.blit(surface, rect.topleft - self.offset)
 
 
@@ -81,12 +82,15 @@ class Player(Entity):
         if (self.player_moving.length() > 0):  # if there's movement basically.
             self.player_moving = self.player_moving.normalize() * self.player_speed  # multiplying unit vector by speed
 
-        self.movement(self.surface, self.rect, self.player_moving, screen_instance)
+        self.movement(self.surface, self.rect, self.player_moving, screen_instance, True)
 
         #calculating the world position of the mouse, then getting the direction vector between the mouse and player
-        shoot_dir = (self.mousepos[0] + self.rect.center[0]) - self.rect.center[0], (self.mousepos[1] + self.rect.center[1]) - self.rect.center[1]
-        #drawing a line to test if the direction vector is correct
-        pygame.draw.line(screen_instance, colours[5], self.rect.center - self.offset, shoot_dir)
+        world_mouse_pos = self.mousepos + self.offset
+        shoot_dir = world_mouse_pos - self.rect.center
+        shoot_dir = shoot_dir.normalize() * 5  # Normalize and scale by bullet speed
+
+        # drawing a line to test if the direction vector is correct
+        pygame.draw.line(screen_instance, colours[5], self.rect.center - self.offset, world_mouse_pos - self.offset)
         #shooting behaviour
         if pygame.mouse.get_pressed()[0] and self.firecooldown <= 0:
             self.shoot_bullets(shoot_dir, screen_instance, 5, self.damage)
@@ -95,7 +99,7 @@ class Player(Entity):
         self.firecooldown -= 1 * deltaTime
 
     def shoot_bullets(self, movement_vector, screen_instance, speed, damage):
-        new_bullet = Bullet(damage, speed, movement_vector, screen_instance, self.bullet_img, self.rect.centerx - self.offset.x, self.rect.centery - self.offset.y)
+        new_bullet = Bullet(damage, speed, movement_vector, screen_instance, self.bullet_img, self.rect.centerx, self.rect.centery)
         self.bullets.append(new_bullet)
 
     def power_up(self):
@@ -106,6 +110,7 @@ class Bullet(Entity):
         self.damage = damage
         self.speed = speed
         self.movement_vector = pygame.math.Vector2(movement_vector).normalize() * self.speed  # Normalize and apply speed
+        self.position = pygame.math.Vector2(x, y)
         self.screen_instance = screen_instance
         self.offset = pygame.math.Vector2()
         self.sprite = image
@@ -117,10 +122,22 @@ class Bullet(Entity):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        screen_instance.blit(self.image, (self.rect.x, self.rect.y))
-    def Update(self):
-        print(self.rect.x)
-        self.movement(self.image, self.rect, self.movement_vector, self.screen_instance)
+
+    def Update(self, main_camera):
+        self.position += self.movement_vector
+        print(self.position)
+
+        # Calculate the screen position based on the camera's position
+        screen_x = self.position.x - main_camera.offset[0]
+        screen_y = self.position.y - main_camera.offset[1]
+
+        # Update the rect for collision purposes
+        self.rect.x = self.position.x
+        self.rect.y = self.position.y
+
+        # Draw the bullet at the calculated screen position
+        self.screen_instance.blit(self.image, (screen_x, screen_y))
+
 
 class Enemy(Entity):
     def __init__(self, health, damage, speed, cancollide, x, y, width, height):
