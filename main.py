@@ -17,8 +17,8 @@ pygame.init()
 
 # window settings
 pygame.display.set_caption('Raid Tower Legends II©')
-SCREEN_WIDTH = 1600
-SCREEN_HEIGHT = 900
+SCREEN_WIDTH = 700
+SCREEN_HEIGHT = 700
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # clock

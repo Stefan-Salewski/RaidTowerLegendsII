@@ -132,7 +132,7 @@ class level_generation():
     def populate_room(self, roomlist):
         for room in roomlist:
             room_center_x = room[0].x + 500
-            room_center_y = room[0].y - 500
+            room_center_y = room[0].y + 500
             print("x", room_center_x, "y", room_center_y)
             for wall in room:
                 pass
