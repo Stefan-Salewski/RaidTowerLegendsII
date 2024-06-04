@@ -68,22 +68,20 @@ level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
 room_list = []
 offset = pygame.math.Vector2()
 
+bullets = []
+
+temp_enemy = Enemy(100, 10, 5, True, 50,50,50,50)
+
 # Player initialization
-player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT, bullet_img) # dimensions are automatically halved in the function
-
-temp_enemy = Enemy(100,100,5,True, 500, 300, 50, 50)
-
-main_camera = Camera()
-#test of the update camera
-#main_camera.update_camera(pygame.math.Vector2(300,100))
-
-# Load the menu music
+player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT, bullet_img, bullets)
 pygame.mixer.init()
 pygame.mixer.music.load("Sound/Music/Menu - Spaceship Hangar.wav")
 pygame.mixer.music.set_volume(0)
 pygame.mixer.music.play(-1)  # Play the music in a loop
 
 getTicksLastFrame = 0
+
+main_camera = Camera()
 
 while running:
     # getting deltatime for fire rate cooldown
@@ -162,6 +160,9 @@ while running:
                 if player_entity.mask.overlap(wall.mask, collision_offset):
                     player_entity.rect.topleft = oldPlyerX, oldPlyerY
 
+        for bullet in bullets:
+            print(bullet)
+            bullet.Update()
         #printing player cords for debug
 
         #temp_enemy_offset = temp_enemy.rect.topleft - main_camera.offset

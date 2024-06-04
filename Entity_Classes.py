@@ -42,8 +42,9 @@ class Entity():
 
 
 class Player(Entity):
-    def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, bullet_img, invulnerability=False, health=100, damage=25,firerate = 1, cancollide=True):
+    def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, bullet_img, bullets, invulnerability=False, health=100, damage=25,firerate = 1, cancollide=True):
         self.bullet_img = bullet_img
+        self.bullets = bullets
         self.invulnerability = invulnerability
         self.health = health
         self.damage = damage
@@ -95,7 +96,7 @@ class Player(Entity):
 
     def shoot_bullets(self, movement_vector, screen_instance, speed, damage):
         new_bullet = Bullet(damage, speed, movement_vector, screen_instance, self.bullet_img)
-        pass
+        self.bullets.append(new_bullet)
 
     def power_up(self):
         pass
@@ -115,7 +116,8 @@ class Bullet(Entity):
         self.image = pygame.transform.scale(self.sprite, (int(image_width * 1), int(image_height * 1)))
         self.rect = self.image.get_rect()
         screen_instance.blit(self.image, (self.rect.x, self.rect.y))
-
+    def Update(self):
+        self.movement(self.image, self.rect, self.movement_vector, self.screen_instance)
 
 class Enemy(Entity):
     def __init__(self, health, damage, speed, cancollide, x, y, width, height):
