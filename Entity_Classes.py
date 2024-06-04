@@ -95,17 +95,17 @@ class Player(Entity):
         self.firecooldown -= 1 * deltaTime
 
     def shoot_bullets(self, movement_vector, screen_instance, speed, damage):
-        new_bullet = Bullet(damage, speed, movement_vector, screen_instance, self.bullet_img)
+        new_bullet = Bullet(damage, speed, movement_vector, screen_instance, self.bullet_img, self.rect.centerx - self.offset.x, self.rect.centery - self.offset.y)
         self.bullets.append(new_bullet)
 
     def power_up(self):
         pass
 
 class Bullet(Entity):
-    def __init__(self, damage, speed, movement_vector, screen_instance,image):
+    def __init__(self, damage, speed, movement_vector, screen_instance,image, x, y):
         self.damage = damage
         self.speed = speed
-        self.movement_vector = movement_vector
+        self.movement_vector = pygame.math.Vector2(movement_vector).normalize() * self.speed  # Normalize and apply speed
         self.screen_instance = screen_instance
         self.offset = pygame.math.Vector2()
         self.sprite = image
@@ -115,6 +115,8 @@ class Bullet(Entity):
         image_height = self.sprite.get_height()
         self.image = pygame.transform.scale(self.sprite, (int(image_width * 1), int(image_height * 1)))
         self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
         screen_instance.blit(self.image, (self.rect.x, self.rect.y))
     def Update(self):
         self.movement(self.image, self.rect, self.movement_vector, self.screen_instance)

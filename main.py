@@ -159,9 +159,9 @@ while running:
                 collision_offset = (wall.get_rect().x - player_entity.rect.x), (wall.get_rect().y - player_entity.rect.y)
                 if player_entity.mask.overlap(wall.mask, collision_offset):
                     player_entity.rect.topleft = oldPlyerX, oldPlyerY
-
+        #bullets = player_entity.bullets
+        print(bullets)
         for bullet in bullets:
-            print(bullet)
             bullet.Update()
         #printing player cords for debug
 
