@@ -119,6 +119,7 @@ class Bullet(Entity):
         self.rect.y = y
         screen_instance.blit(self.image, (self.rect.x, self.rect.y))
     def Update(self):
+        print(self.rect.x)
         self.movement(self.image, self.rect, self.movement_vector, self.screen_instance)
 
 class Enemy(Entity):
