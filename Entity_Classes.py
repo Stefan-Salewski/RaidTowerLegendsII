@@ -87,18 +87,19 @@ class Player(Entity):
         #calculating the world position of the mouse, then getting the direction vector between the mouse and player
         world_mouse_pos = self.mousepos + self.offset
         shoot_dir = world_mouse_pos - self.rect.center
-        shoot_dir = shoot_dir.normalize() * 5  # Normalize and scale by bullet speed
-
         # drawing a line to test if the direction vector is correct
         pygame.draw.line(screen_instance, colours[5], self.rect.center - self.offset, world_mouse_pos - self.offset)
         #shooting behaviour
         if pygame.mouse.get_pressed()[0] and self.firecooldown <= 0:
+              # Normalize and scale by bullet speed
             self.shoot_bullets(shoot_dir, screen_instance, 5, self.damage)
             self.firecooldown = self.firerate
 
         self.firecooldown -= 1 * deltaTime
 
     def shoot_bullets(self, movement_vector, screen_instance, speed, damage):
+        #normalizing and multiplying by speed to get the right vector
+        movement_vector = movement_vector.normalize() * speed
         new_bullet = Bullet(damage, speed, movement_vector, screen_instance, self.bullet_img, self.rect.centerx, self.rect.centery)
         self.bullets.append(new_bullet)
 
