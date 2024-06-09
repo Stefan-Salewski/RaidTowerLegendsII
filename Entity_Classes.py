@@ -160,10 +160,7 @@ class Enemy(Entity):
         enemy_moving = pygame.math.Vector2(self.x - (player_ref.rect.centerx),self.y - (player_ref.rect.centery))
 
         # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
-        #if (enemy_moving.length() > 0):  # if there's movement basically.
-            #enemy_moving = enemy_moving.normalize() * self.enemy_speed  # multiplying unit vector by speed
-
-        if(enemy_moving.length() <= 1000):
+        if(enemy_moving.length() <= 1000 and enemy_moving.length() > 0):
             enemy_moving = enemy_moving.normalize() * self.enemy_speed
             self.rect.move_ip(enemy_moving.x, enemy_moving.y)  # moving it by whatever the new vectors coordinates are
 
