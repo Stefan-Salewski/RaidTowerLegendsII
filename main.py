@@ -167,6 +167,11 @@ while running:
                     if wall.mask.overlap(enemy.mask, collision_offset):
                         enemy.rect.topleft = enemy.oldx, enemy.oldy
 
+            collision_offset = (enemy.rect.x - player_entity.rect.x), (enemy.rect.y - player_entity.rect.y)
+            if player_entity.mask.overlap(enemy.mask, collision_offset):
+                player_entity.rect.topleft = oldPlyerX, oldPlyerY
+                enemy.rect.topleft = enemy.oldx,enemy.oldy
+
         for bullet in bullets:
             bullet.Update(main_camera)
         # draw the rooms

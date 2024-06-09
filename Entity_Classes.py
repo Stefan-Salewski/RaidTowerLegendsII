@@ -158,21 +158,22 @@ class Enemy(Entity):
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.surface = pygame.Surface(self.rect.size)
         self.mask = pygame.mask.from_surface(self.surface)
+        self.enemy_moving = pygame.math.Vector2()
 
     def enemy_movement(self, screen_instance, player_ref, camera_offset):
-        enemy_moving = pygame.math.Vector2(player_ref.rect.centerx - self.rect.centerx, (player_ref.rect.centery) - self.rect.centery)
+        self.enemy_moving = pygame.math.Vector2(player_ref.rect.centerx - self.rect.centerx, (player_ref.rect.centery) - self.rect.centery)
 
         # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
-        if(enemy_moving.length() <= 1000 and enemy_moving.length() > 0):
-            enemy_moving = enemy_moving.normalize() * self.enemy_speed
-            self.rect.move_ip(enemy_moving.x, enemy_moving.y)  # moving it by whatever the new vectors coordinates are
+        if(self.enemy_moving.length() <= 1000 and self.enemy_moving.length() > 0):
+            self.enemy_moving = self.enemy_moving.normalize() * self.enemy_speed
+            self.rect.move_ip(self.enemy_moving.x, self.enemy_moving.y)  # moving it by whatever the new vectors coordinates are
 
         #convert rect to a surface and draw to the screen
         self.surface.fill(colours[2])
         offset = self.rect.topleft - camera_offset
         screen_instance.blit(self.surface, offset)
 
-        return enemy_moving
+        return self.enemy_moving
 
 class Level_End(Entity):
     def __init__(self, x, y, width, height):
