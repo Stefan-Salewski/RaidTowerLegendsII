@@ -16,11 +16,12 @@ class level_generation():
         self.screen = screen
         self.pygame = pygame_instance
         self.level = 0
-
+        self.exit = None
     def create_room(self, x, y, prevdoor, door, iteration, numrooms):
         room = []
         if iteration == numrooms - 1:
             door = -1
+            self.exit = Entity_Classes.Level_End(x + 500, y + 500, 50, 50)
         # Top wall
         topleft = Wall(x, y, 400, 10)
         topright = Wall(x + 600, y, 400, 10)
@@ -137,6 +138,7 @@ class level_generation():
 
     #type, "enemy" for enemies, "loot" for upgrades and stuff
     def populate_room(self, roomlist, objectlist, type):
+
         for room in roomlist:
             room_center_x = room[0].x + 500
             room_center_y = room[0].y + 500
@@ -145,11 +147,13 @@ class level_generation():
             if(roomlist[0] == room):
                 amount_to_spawn = -1
             print(amount_to_spawn)
+
             for i in range(amount_to_spawn):
                 randomx = random.randint(room_center_x - 400, room_center_x + 400)
                 randomy = random.randint(room_center_y - 400, room_center_y + 400)
                 if type == "enemy":
                     object_to_add = Entity_Classes.Enemy(100 * (self.level /2), 10 * self.level, 4 + (self.level * 0.5), True, randomx, randomy, 50,50)
+                    print(object_to_add)
                 elif type == "loot":
                     pass
                 else:

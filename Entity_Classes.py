@@ -11,7 +11,8 @@ BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 RANDOM = ((random.randint(0, 255)), (random.randint(0, 255)), (random.randint(0, 255)))
-colours = [WHITE, BLACK, RED, BLUE, GREEN, RANDOM]
+PURPLE = (128, 0, 128)
+colours = [WHITE, BLACK, RED, BLUE, GREEN, RANDOM, PURPLE]
 
 
 class Entity():
@@ -173,7 +174,17 @@ class Enemy(Entity):
 
         return enemy_moving
 
-
+class Level_End(Entity):
+    def __init__(self, x, y, width, height):
+        self.invulnerability = True
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.surface = pygame.Surface(self.rect.size)
+        self.surface.fill(colours[6])
+        self.mask = pygame.mask.from_surface(self.surface)
 class Wall(Entity):
     def __init__(self, x, y, width, height):
         self.invulnerability = True

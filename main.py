@@ -69,7 +69,7 @@ room_list = []
 offset = pygame.math.Vector2()
 
 bullets = []
-
+level_end = []
 enemies = []
 
 # Player initialization
@@ -82,6 +82,15 @@ pygame.mixer.music.play(-1)  # Play the music in a loop
 getTicksLastFrame = 0
 
 main_camera = Camera()
+
+def new_level(level):
+    level_generator.level = level
+    room_list.clear()
+    enemies.clear()
+    player_entity.rect.topleft = 0,0
+    level_generator.generate_level(10 + level, room_list, 0, [], [], random.randint(0, 3))
+    level_generator.populate_room(room_list, enemies, "enemy")
+
 
 while running:
     # getting deltatime for fire rate cooldown
@@ -115,9 +124,9 @@ while running:
             pygame.mixer.music.play(-1)  # Play the music in a loop
 
             # level generation
-            room_list = level_generator.generate_level(10, room_list, 0, [], [], random.randint(0, 3))
+
             #spawn enemies and treasure in rooms
-            level_generator.populate_room(room_list, enemies, "enemy")
+            new_level(0)
 
             game_state = "playing"
 
@@ -178,6 +187,12 @@ while running:
                 if player_entity.mask.overlap(wall.mask, collision_offset):
                     player_entity.rect.topleft = oldPlyerX, oldPlyerY
 
+        collision_offset = (level_generator.exit.rect.x - player_entity.rect.x), (level_generator.exit.rect.y - player_entity.rect.y)
+
+        if player_entity.mask.overlap(level_generator.exit.mask, collision_offset):
+            level_generator.level += 1
+            new_level(level_generator.level)
+
         #printing player cords for debug
 
         #temp_enemy_offset = temp_enemy.rect.topleft - main_camera.offset
@@ -191,9 +206,13 @@ while running:
         screen.blit(player_cords, (screen.get_width() - 200, screen.get_height() - 50))
         fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[2])
         screen.blit(fps_counter, (0 , 0 ))
-
+        level_counter = REGULAR_FONT.render("Level " + str(level_generator.level), True, colours[4])
+        screen.blit(level_counter, ((screen.get_width() /2) - level_counter.get_width() / 2, screen.get_height()- 1000))
+        print(level_generator.exit.rect.x, level_generator.exit.rect.y)
+        screen.blit(level_generator.exit.surface, level_generator.exit.rect.topleft - main_camera.offset)
     # flip the display to put your work on screen
     pygame.display.flip()
     clock.tick(fps)
 
 pygame.quit()
+
