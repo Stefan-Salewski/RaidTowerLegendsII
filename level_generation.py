@@ -10,9 +10,11 @@ import random
 class level_generation():
 
 #fun initialization
-    def __init__(self, pygame_instance, screen, SCREEN_WIDTH, SCREEN_HEIGHT):
+    def __init__(self, pygame_instance, screen, SCREEN_WIDTH, SCREEN_HEIGHT, chest_open, chest_closed):
         self.width = SCREEN_WIDTH
         self.height = SCREEN_HEIGHT
+        self.chest_open = chest_open
+        self.chest_closed = chest_closed
         self.screen = screen
         self.pygame = pygame_instance
         self.level = 0
@@ -146,17 +148,16 @@ class level_generation():
 
             if(roomlist[0] == room):
                 amount_to_spawn = -1
-            print(amount_to_spawn)
+
 
             for i in range(amount_to_spawn):
                 randomx = random.randint(room_center_x - 400, room_center_x + 400)
                 randomy = random.randint(room_center_y - 400, room_center_y + 400)
                 if type == "enemy":
-                    object_to_add = Entity_Classes.Enemy(100 + (10 * self.level /2), 10 + (10 * self.level), 4 + (self.level * 0.5), True, randomx, randomy, 50,50)
-                    print(object_to_add)
+                    object_to_add = Entity_Classes.Enemy(100 + (10 * self.level /2), 2 + (10 * self.level), 4 + (self.level * 0.5), True, randomx, randomy, 50,50)
                 elif type == "loot":
-                    object_to_add = Entity_Classes.Chest(randomx, randomy, 1, random.randint(10 + (3 * self.level), 20 + (5 * self.level)))
-                    print(object_to_add)
+
+                    object_to_add = Entity_Classes.Chest(randomx, randomy, 4, random.randint(10 + (3 * self.level), 20 + (5 * self.level)), self.chest_closed, self.chest_open)
                 else:
                     print("invalid type")
                 objectlist.append(object_to_add)

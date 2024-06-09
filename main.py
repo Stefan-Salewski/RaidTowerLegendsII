@@ -2,6 +2,7 @@ import random
 
 import pygame
 
+import Entity_Classes
 from camera import Camera
 from level_generation import level_generation
 from menu import Menu
@@ -17,8 +18,8 @@ pygame.init()
 
 # window settings
 pygame.display.set_caption('Raid Tower Legends II©')
-SCREEN_WIDTH = 1920
-SCREEN_HEIGHT = 1080
+SCREEN_WIDTH = 700
+SCREEN_HEIGHT = 700
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # clock
@@ -53,6 +54,9 @@ back_img_hover = pygame.image.load("Art/back_hover.png").convert_alpha()
 
 bullet_img = pygame.image.load('Art/bullet.png').convert_alpha()
 
+chest_open = pygame.image.load("Art/chest_open.png").convert_alpha()
+chest_closed = pygame.image.load("Art/chest_closed.png").convert_alpha()
+
 # initializing buttons outside the loop
 start = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5, start_img, start_img_hover, 0.7)
 quit = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.8, quit_img, quit_img_hover,0.7)
@@ -68,13 +72,14 @@ settings_white_rect = pygame.Rect(0, 0, settings_width - 2, settings_height - 2)
 settings_white_rect.center = (SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.05) # same placement as settings button
 
 # game  levels
-level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
+level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT, chest_open, chest_closed)
 room_list = []
 offset = pygame.math.Vector2()
 
 bullets = []
 level_end = []
 enemies = []
+chests = []
 
 # Player initialization
 player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT, bullet_img, bullets, game_state)
@@ -95,10 +100,10 @@ def new_level(level):
     player_entity.rect.topleft = 0,0
     level_generator.generate_level(10 + level, room_list, 0, [], [], random.randint(0, 3))
     level_generator.populate_room(room_list, enemies, "enemy")
+    level_generator.populate_room(room_list, chests, "loot")
 
 
 while running:
-    print(game_state)
     # getting deltatime for fire rate cooldown
     t = pygame.time.get_ticks()
     deltaTime = (t - getTicksLastFrame) / 1000.0
@@ -181,6 +186,7 @@ while running:
                     bullets.remove(bullet)
                     enemy.Take_Damage(player_entity.damage)
                     if enemy.health <= 0:
+                        player_entity.money += 4 + (2 * level_generator.level)
                         enemies.remove(enemy)
 
             collision_offset = (enemy.rect.x - player_entity.rect.x), (enemy.rect.y - player_entity.rect.y)
@@ -210,6 +216,15 @@ while running:
                 collision_offset = (wall.get_rect().x - player_entity.rect.x), (wall.get_rect().y - player_entity.rect.y)
                 if player_entity.mask.overlap(wall.mask, collision_offset):
                     player_entity.rect.topleft = oldPlyerX, oldPlyerY
+        for chest in chests:
+            chest_offset = chest.rect.topleft - main_camera.offset
+            screen.blit(chest.image, chest_offset)
+            chest_cost = REGULAR_FONT.render("$" + str(chest.cost), True,colours[0])
+            screen.blit(chest_cost,pygame.math.Vector2(chest.rect.centerx - main_camera.offset.x - chest_cost.get_width()/2,chest.rect.centery - main_camera.offset.y) )
+            collision_offset = (chest.rect.x - player_entity.rect.x), (chest.rect.y - player_entity.rect.y)
+            if player_entity.mask.overlap(chest.mask, collision_offset) and player_entity.money >= chest.cost:
+                chest.open_chest()
+                player_entity.money -= chest.cost
 
         # end level
         collision_offset = (level_generator.exit.rect.x - player_entity.rect.x), (level_generator.exit.rect.y - player_entity.rect.y)
@@ -217,10 +232,6 @@ while running:
             level_generator.level += 1
             new_level(level_generator.level)
 
-        #printing player cords for debug
-
-        #temp_enemy_offset = temp_enemy.rect.topleft - main_camera.offset
-        #temp_enemy.enemy_movement(screen, player_entity, temp_enemy_offset)
         #setting camera offset
         main_camera.update_camera(player_entity.offset)
 
@@ -234,10 +245,11 @@ while running:
         screen.blit(level_counter, ((screen.get_width() /2) - level_counter.get_width() / 2, screen.get_height()- 1000))
 
         health_test = REGULAR_FONT.render(str(player_entity.max_health) + "/" + str(player_entity.health), True, colours[4])
-        screen.blit(health_test,
-                    ((screen.get_width() / 2) - level_counter.get_width() / 2, screen.get_height() - 500))
+        screen.blit(health_test,((screen.get_width() / 2) - level_counter.get_width() / 2, screen.get_height() / 1.75))
 
-        print(level_generator.exit.rect.x, level_generator.exit.rect.y)
+        money = REGULAR_FONT.render("$" + str(player_entity.money), True, colours[4])
+        screen.blit(money, ((screen.get_width() / 12) - money.get_width() / 2, screen.get_height() / 1.1))
+
         screen.blit(level_generator.exit.surface, level_generator.exit.rect.topleft - main_camera.offset)
 
     elif game_state == "dead":

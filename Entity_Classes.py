@@ -52,6 +52,7 @@ class Entity():
 class Player(Entity):
     def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, bullet_img, bullets, game_state, invulnerability=False, health=100, damage=25,firerate = 1, cancollide=True, ):
         self.bullet_img = bullet_img
+        self.money = 0
         self.bullets = bullets
         self.invulnerability = invulnerability
         self.max_health = health
@@ -209,13 +210,16 @@ class Wall(Entity):
     pass
 
 class Chest(Entity):
-    def __init__(self, x, y, scale, cost):
-        self.chest_closed = pygame.image.load("Art/chest_closed.png.png").convert_alpha()
-        self.chest_open = pygame.image.load("Art/chest_open.png.png").convert_alpha()
+    def __init__(self, x, y, scale, cost, chest_closed, chest_open):
+
         self.invulnerability = True
         self.scale = scale
         self.cost = cost
-        self.image = pygame.transform.scale(self.chest_closed, (int(16 * self.scale), int(16 * self.scale)))
+        self.chest_closed = chest_closed
+        self.chest_open = chest_open
+        image_width = self.chest_closed.get_width()
+        image_height = self.chest_closed.get_height()
+        self.image = pygame.transform.scale(self.chest_closed, (int(image_width * self.scale), int(image_height * self.scale)))
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.x = x
