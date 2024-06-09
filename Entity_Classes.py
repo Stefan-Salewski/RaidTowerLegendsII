@@ -207,3 +207,19 @@ class Wall(Entity):
         return self.rect
 
     pass
+
+class Chest(Entity):
+    def __init__(self, x, y, scale, cost):
+        self.chest_closed = pygame.image.load("Art/chest_closed.png.png").convert_alpha()
+        self.chest_open = pygame.image.load("Art/chest_open.png.png").convert_alpha()
+        self.invulnerability = True
+        self.scale = scale
+        self.cost = cost
+        self.image = pygame.transform.scale(self.chest_closed, (int(16 * self.scale), int(16 * self.scale)))
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def open_chest(self):
+        self.image = pygame.transform.scale(self.chest_open, (int(16 * self.scale), int(16 * self.scale)))

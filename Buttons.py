@@ -47,5 +47,3 @@ class Button():
 
             if (pygame.mouse.get_pressed()[0] == False):
                 self.clicked = False
-
-#

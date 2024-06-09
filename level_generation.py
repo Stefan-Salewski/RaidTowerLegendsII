@@ -155,9 +155,9 @@ class level_generation():
                     object_to_add = Entity_Classes.Enemy(100 + (10 * self.level /2), 10 + (10 * self.level), 4 + (self.level * 0.5), True, randomx, randomy, 50,50)
                     print(object_to_add)
                 elif type == "loot":
-                    pass
+                    object_to_add = Entity_Classes.Chest(randomx, randomy, 1, random.randint(10 + (3 * self.level), 20 + (5 * self.level)))
+                    print(object_to_add)
                 else:
                     print("invalid type")
                 objectlist.append(object_to_add)
         return objectlist
-
