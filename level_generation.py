@@ -4,7 +4,7 @@
 #Can be called from main to generate a list of rooms
 #Stefan Salewski
 #*************************************************
-
+import Entity_Classes
 from Entity_Classes import Wall
 import random
 class level_generation():
@@ -15,6 +15,7 @@ class level_generation():
         self.height = SCREEN_HEIGHT
         self.screen = screen
         self.pygame = pygame_instance
+        self.level = 0
 
     def create_room(self, x, y, prevdoor, door, iteration, numrooms):
         room = []
@@ -52,7 +53,7 @@ class level_generation():
             botdoor = Wall(x + 400, y + 1000, 200, 10)
             room.append(botdoor)
         botleft = Wall(x, y + 1000, 400, 10)
-        botright = Wall(x + 600, y + 1000, 400, 10)
+        botright = Wall(x + 600, y + 1000, 410, 10)
 
         room.append(botright)
         room.append(botleft)
@@ -118,10 +119,15 @@ class level_generation():
 
                 return rooms
         else:
+            #first room
             nextrandomnum = random.randint(0, 3)
-            rooms.append(self.create_room(0, 0, 4, nextrandomnum, iteration, numrooms))
-            prevx.append(0)
-            prevy.append(0)
+
+            x = -500
+            y = -500
+
+            rooms.append(self.create_room(x, y, 4, nextrandomnum, iteration, numrooms))
+            prevx.append(x)
+            prevy.append(y)
 
         if iteration == numrooms - 1:
 
@@ -129,11 +135,25 @@ class level_generation():
         else:
             return self.generate_level(numrooms, rooms, iteration + 1, prevx, prevy, nextrandomnum)
 
-    def populate_room(self, roomlist):
+    #type, "enemy" for enemies, "loot" for upgrades and stuff
+    def populate_room(self, roomlist, objectlist, type):
         for room in roomlist:
             room_center_x = room[0].x + 500
             room_center_y = room[0].y + 500
-            print("x", room_center_x, "y", room_center_y)
-            for wall in room:
-                pass
+            amount_to_spawn = random.randint(0, 2 + self.level)
+
+            if(roomlist[0] == room):
+                amount_to_spawn = -1
+            print(amount_to_spawn)
+            for i in range(amount_to_spawn):
+                randomx = random.randint(room_center_x - 400, room_center_x + 400)
+                randomy = random.randint(room_center_y - 400, room_center_y + 400)
+                if type == "enemy":
+                    object_to_add = Entity_Classes.Enemy(100 * (self.level /2), 10 * self.level, 5, True, randomx, randomy, 50,50)
+                elif type == "loot":
+                    pass
+                else:
+                    print("invalid type")
+                objectlist.append(object_to_add)
+        return objectlist
 

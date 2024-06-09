@@ -53,7 +53,7 @@ class Player(Entity):
         self.cancollide = cancollide
         self.firerate = firerate
         self.firecooldown = self.firerate
-        self.rect = pygame.Rect((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 50, 50)
+        self.rect = pygame.Rect(0, 0, 50, 50)
         self.player_speed = 5
         self.surface = pygame.Surface(self.rect.size)
         self.mask = pygame.mask.from_surface(self.surface)
@@ -129,7 +129,6 @@ class Bullet(Entity):
 
     def Update(self, main_camera):
         self.position += self.movement_vector
-        print(self.position)
 
         # Calculate the screen position based on the camera's position
         screen_x = self.position.x - main_camera.offset[0]
@@ -141,7 +140,6 @@ class Bullet(Entity):
 
         # Draw the bullet at the calculated screen position
         self.screen_instance.blit(self.image, (screen_x, screen_y))
-
 
 class Enemy(Entity):
     def __init__(self, health, damage, speed, cancollide, x, y, width, height):
@@ -159,13 +157,15 @@ class Enemy(Entity):
         self.mask = pygame.mask.from_surface(self.surface)
 
     def enemy_movement(self, screen_instance, player_ref, camera_offset):
-        enemy_moving = pygame.math.Vector2()  # creating a vector for enemy movement
+        enemy_moving = pygame.math.Vector2(self.x - (player_ref.rect.centerx),self.y - (player_ref.rect.centery))
 
         # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
-        if (enemy_moving.length() > 0):  # if there's movement basically.
-            enemy_moving = enemy_moving.normalize() * self.enemy_speed  # multiplying unit vector by speed
+        #if (enemy_moving.length() > 0):  # if there's movement basically.
+            #enemy_moving = enemy_moving.normalize() * self.enemy_speed  # multiplying unit vector by speed
 
-        self.rect.move_ip(enemy_moving.x, enemy_moving.y)  # moving it by whatever the new vectors coordinates are
+        if(enemy_moving.length() <= 1000):
+            enemy_moving = enemy_moving.normalize() * self.enemy_speed
+            self.rect.move_ip(enemy_moving.x, enemy_moving.y)  # moving it by whatever the new vectors coordinates are
 
         #convert rect to a surface and draw to the screen
         self.surface.fill(colours[2])

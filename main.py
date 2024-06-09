@@ -17,8 +17,8 @@ pygame.init()
 
 # window settings
 pygame.display.set_caption('Raid Tower Legends II©')
-SCREEN_WIDTH = 700
-SCREEN_HEIGHT = 700
+SCREEN_WIDTH = 1920
+SCREEN_HEIGHT = 1080
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # clock
@@ -70,7 +70,7 @@ offset = pygame.math.Vector2()
 
 bullets = []
 
-temp_enemy = Enemy(100, 10, 5, True, 50,50,50,50)
+enemies = []
 
 # Player initialization
 player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT, bullet_img, bullets)
@@ -117,7 +117,7 @@ while running:
             # level generation
             room_list = level_generator.generate_level(10, room_list, 0, [], [], random.randint(0, 3))
             #spawn enemies and treasure in rooms
-            level_generator.populate_room(room_list)
+            level_generator.populate_room(room_list, enemies, "enemy")
 
             game_state = "playing"
 
@@ -145,7 +145,12 @@ while running:
         # add player movement and other game logic here
         oldPlyerX, oldPlyerY = player_entity.rect.topleft
         player_entity.player_input(screen, deltaTime)
-        temp_enemy.enemy_movement(screen, player_entity,main_camera.offset)
+        for enemy in enemies:
+            enemy.enemy_movement(screen, player_entity, main_camera.offset)
+            enemy_cords = REGULAR_FONT.render(str(("X:", enemy.rect.x, "Y:", enemy.rect.y)), True,colours[2])
+            text_pos = enemy.rect.center[0] - 50, enemy.rect.center[1] + 50
+            screen.blit(enemy_cords, text_pos - main_camera.offset)
+
         for bullet in bullets:
             bullet.Update(main_camera)
         # draw the rooms
@@ -155,16 +160,16 @@ while running:
                 rect_surface.fill(colours[0])
                 wall_offset = wall.get_rect().topleft - main_camera.offset
                 screen.blit(rect_surface, wall_offset)
+
+                #Collision code
                 for bullet in bullets:
                     collision_offset = (wall.get_rect().x - bullet.rect.x), (wall.get_rect().y - bullet.rect.y)
                     if bullet.mask.overlap(wall.mask, collision_offset):
                         bullets.remove(bullet)
-                # collision
+
                 collision_offset = (wall.get_rect().x - player_entity.rect.x), (wall.get_rect().y - player_entity.rect.y)
                 if player_entity.mask.overlap(wall.mask, collision_offset):
                     player_entity.rect.topleft = oldPlyerX, oldPlyerY
-
-        #bullets = player_entity.bullets
 
         #printing player cords for debug
 
@@ -175,6 +180,7 @@ while running:
 
         #In game UI drawn last so its on top of everything
         player_cords = REGULAR_FONT.render(str(("X:", player_entity.rect.x, "Y:", player_entity.rect.y)), True,colours[2])
+
         screen.blit(player_cords, (screen.get_width() - 200, screen.get_height() - 50))
         fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[2])
         screen.blit(fps_counter, (0 , 0 ))
