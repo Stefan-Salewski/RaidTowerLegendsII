@@ -150,6 +150,8 @@ class Enemy(Entity):
         self.cancollide = cancollide
         self.x = x
         self.y = y
+        self.oldx = 0
+        self.oldy = 0
         self.width = width
         self.height = height
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
@@ -157,7 +159,7 @@ class Enemy(Entity):
         self.mask = pygame.mask.from_surface(self.surface)
 
     def enemy_movement(self, screen_instance, player_ref, camera_offset):
-        enemy_moving = pygame.math.Vector2(self.x - (player_ref.rect.centerx),self.y - (player_ref.rect.centery))
+        enemy_moving = pygame.math.Vector2(player_ref.rect.centerx - self.rect.centerx, (player_ref.rect.centery) - self.rect.centery)
 
         # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
         if(enemy_moving.length() <= 1000 and enemy_moving.length() > 0):

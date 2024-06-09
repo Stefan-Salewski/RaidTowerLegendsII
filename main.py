@@ -146,10 +146,17 @@ while running:
         oldPlyerX, oldPlyerY = player_entity.rect.topleft
         player_entity.player_input(screen, deltaTime)
         for enemy in enemies:
+            enemy.oldx, enemy.oldy = enemy.rect.topleft
+
             enemy.enemy_movement(screen, player_entity, main_camera.offset)
             enemy_cords = REGULAR_FONT.render(str(("X:", enemy.rect.x, "Y:", enemy.rect.y)), True,colours[2])
             text_pos = enemy.rect.center[0] - 50, enemy.rect.center[1] + 50
             screen.blit(enemy_cords, text_pos - main_camera.offset)
+            for room in room_list:
+                for wall in room:
+                    collision_offset = (enemy.rect.x - wall.get_rect().x), (enemy.rect.y - wall.get_rect().y)
+                    if wall.mask.overlap(enemy.mask, collision_offset):
+                        enemy.rect.topleft = enemy.oldx, enemy.oldy
 
         for bullet in bullets:
             bullet.Update(main_camera)
