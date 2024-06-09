@@ -52,7 +52,7 @@ class Entity():
 class Player(Entity):
     def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, bullet_img, bullets, game_state, invulnerability=False, health=100, damage=25,firerate = 1, cancollide=True, ):
         self.bullet_img = bullet_img
-        self.money = 0
+        self.money = 100
         self.bullets = bullets
         self.invulnerability = invulnerability
         self.max_health = health
@@ -109,7 +109,7 @@ class Player(Entity):
     def shoot_bullets(self, movement_vector, screen_instance, speed, damage):
         #normalizing and multiplying by speed to get the right vector
         movement_vector = movement_vector.normalize() * speed
-        new_bullet = Bullet(damage, speed, movement_vector, screen_instance, self.bullet_img, self.rect.centerx, self.rect.centery)
+        new_bullet = Bullet(damage, speed, movement_vector, screen_instance, self.bullet_img, self.rect.centerx,self.rect.centery)
         self.bullets.append(new_bullet)
 
     def power_up(self):
@@ -210,11 +210,16 @@ class Wall(Entity):
     pass
 
 class Chest(Entity):
-    def __init__(self, x, y, scale, cost, chest_closed, chest_open):
-
+    def __init__(self, x, y, scale, cost, chest_closed, chest_open, powerups):
+        self.damageimage = pygame.image.load("Art/damage.png").convert_alpha()
+        self.healthimage = pygame.image.load("Art/health.png").convert_alpha()
+        self.speedimage = pygame.image.load("Art/move_speed.png").convert_alpha()
+        self.attackspeedimage = pygame.image.load("Art/attack_speed.png").convert_alpha()
         self.invulnerability = True
         self.scale = scale
         self.cost = cost
+        self.opened = False
+        self.powerups = powerups
         self.chest_closed = chest_closed
         self.chest_open = chest_open
         image_width = self.chest_closed.get_width()
@@ -226,4 +231,51 @@ class Chest(Entity):
         self.rect.y = y
 
     def open_chest(self):
+        self.opened = True
         self.image = pygame.transform.scale(self.chest_open, (int(16 * self.scale), int(16 * self.scale)))
+        randomnum = random.randint(0,3)
+        if randomnum == 0:  # health
+            poweruptoadd = "health"
+            powerupimage = self.healthimage
+        elif randomnum == 1:  # damage
+            poweruptoadd = "damage"
+            powerupimage = self.damageimage
+        elif randomnum == 2:  # speed
+            poweruptoadd = "speed"
+            powerupimage = self.speedimage
+        elif randomnum == 3:  # attackspeed
+            poweruptoadd = "attackspeed"
+            powerupimage = self.attackspeedimage
+        newpowerup = Powerup(self.rect.centerx, self.rect.centery - 100, self.scale, powerupimage,poweruptoadd)
+        self.powerups.append(newpowerup)
+
+class Powerup(Entity):
+    def __init__(self, x, y, scale, powerupimage, powerup):
+
+        self.invulnerability = True
+        self.scale = scale
+        self.powerupimage = powerupimage
+        self.powerup = powerup
+        image_width = self.powerupimage.get_width()
+        image_height = self.powerupimage.get_height()
+        self.image = pygame.transform.scale(self.powerupimage, (int(image_width * self.scale), int(image_height * self.scale)))
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def power_up(self, player):
+        if self.powerup == "health":
+            player.max_health += 25
+            player.health += 25
+            pass
+        elif self.powerup == "damage":
+            player.damage += 10
+            pass
+        elif self.powerup == "speed":
+            player.player_speed += 2
+            pass
+        elif self.powerup == "attackspeed":
+            player.firerate = player.firerate / 1.08
+            pass
+        return

@@ -10,8 +10,9 @@ import random
 class level_generation():
 
 #fun initialization
-    def __init__(self, pygame_instance, screen, SCREEN_WIDTH, SCREEN_HEIGHT, chest_open, chest_closed):
+    def __init__(self, pygame_instance, screen, SCREEN_WIDTH, SCREEN_HEIGHT, chest_open, chest_closed, powerups):
         self.width = SCREEN_WIDTH
+        self.powerups = powerups
         self.height = SCREEN_HEIGHT
         self.chest_open = chest_open
         self.chest_closed = chest_closed
@@ -157,7 +158,7 @@ class level_generation():
                     object_to_add = Entity_Classes.Enemy(100 + (10 * self.level /2), 2 + (10 * self.level), 4 + (self.level * 0.5), True, randomx, randomy, 50,50)
                 elif type == "loot":
 
-                    object_to_add = Entity_Classes.Chest(randomx, randomy, 4, random.randint(10 + (3 * self.level), 20 + (5 * self.level)), self.chest_closed, self.chest_open)
+                    object_to_add = Entity_Classes.Chest(randomx, randomy, 4, random.randint(6 + (4 * self.level), 20 + (5 * self.level)), self.chest_closed, self.chest_open, self.powerups)
                 else:
                     print("invalid type")
                 objectlist.append(object_to_add)
