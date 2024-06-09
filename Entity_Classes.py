@@ -16,15 +16,21 @@ colours = [WHITE, BLACK, RED, BLUE, GREEN, RANDOM, PURPLE]
 
 
 class Entity():
-    def __init__(self, invulnerability, health, damage, cancollide):
+    def __init__(self, invulnerability, health, damage, cancollide, game_state):
         #invulnerability should be a true/false toggle, walls should be true for example
         self.invulnerability = invulnerability
-        self.health = health
+        self.max_health = health
+        self.health = self.max_health
         self.damage = damage
         self.cancollide = cancollide
+        self.game_state = game_state
         self.offset = pygame.math.Vector2()
 
         print("Entity spawning")
+    def Take_Damage(self, damage):
+        self.health = self.health - damage
+        if self.health <= 0:
+            self.game_state = "dead"
 
     def movement(self, surface, rect, movement_vector, screen_instance, colorfill):
         rect.move_ip(movement_vector[0], movement_vector[1])  # moving it by whatever the new vectors coordinates are
@@ -44,12 +50,14 @@ class Entity():
 
 
 class Player(Entity):
-    def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, bullet_img, bullets, invulnerability=False, health=100, damage=25,firerate = 1, cancollide=True):
+    def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, bullet_img, bullets, game_state, invulnerability=False, health=100, damage=25,firerate = 1, cancollide=True, ):
         self.bullet_img = bullet_img
         self.bullets = bullets
         self.invulnerability = invulnerability
-        self.health = health
+        self.max_health = health
+        self.health = self.max_health
         self.damage = damage
+        self.game_state = game_state
         self.offset = pygame.math.Vector2()
         self.cancollide = cancollide
         self.firerate = firerate
@@ -61,9 +69,6 @@ class Player(Entity):
         self.player_moving = pygame.math.Vector2()
         self.mousepos = pygame.math.Vector2()
         print("Player initialized")
-    def update_bullet_list(self, bullet_list):
-        self.bullets = bullet_list
-
     def player_input(self, screen_instance, deltaTime):
         #pygame.draw.rect(screen_instance, colours[5], self.player)
         self.mousepos = pygame.mouse.get_pos()
@@ -145,7 +150,8 @@ class Bullet(Entity):
 class Enemy(Entity):
     def __init__(self, health, damage, speed, cancollide, x, y, width, height):
         self.invulnerability = True
-        self.health = health
+        self.max_health = health
+        self.health = self.max_health
         self.damage = damage
         self.enemy_speed = speed
         self.cancollide = cancollide

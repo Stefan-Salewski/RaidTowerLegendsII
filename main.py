@@ -48,6 +48,8 @@ start_img_hover = pygame.image.load("Art/start_select.png").convert_alpha()
 quit_img_hover = pygame.image.load("Art/quit_select.png").convert_alpha()
 settings_img = pygame.image.load("Art/settings.png").convert_alpha()
 settings_img_hover = pygame.image.load("Art/settings_hover.png").convert_alpha()
+back_img = pygame.image.load("Art/back.png").convert_alpha()
+back_img_hover = pygame.image.load("Art/back_hover.png").convert_alpha()
 
 bullet_img = pygame.image.load('Art/bullet.png').convert_alpha()
 
@@ -55,6 +57,8 @@ bullet_img = pygame.image.load('Art/bullet.png').convert_alpha()
 start = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5, start_img, start_img_hover, 0.7)
 quit = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.8, quit_img, quit_img_hover,0.7)
 settings = Button(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.05, settings_img,settings_img_hover,0.1)
+
+back_to_main_menu = Button(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5, back_img, back_img_hover, 3)
 # Get the dimensions of the settings button image
 settings_width = settings_img_hover.get_width() * 0.05 # multiplied by scale
 settings_height = settings_img_hover.get_height() * 0.05 # multiplied by scale
@@ -73,7 +77,7 @@ level_end = []
 enemies = []
 
 # Player initialization
-player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT, bullet_img, bullets)
+player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT, bullet_img, bullets, game_state)
 pygame.mixer.init()
 pygame.mixer.music.load("Sound/Music/Menu - Spaceship Hangar.wav")
 pygame.mixer.music.set_volume(0)
@@ -87,12 +91,14 @@ def new_level(level):
     level_generator.level = level
     room_list.clear()
     enemies.clear()
+    player_entity.health = player_entity.max_health
     player_entity.rect.topleft = 0,0
     level_generator.generate_level(10 + level, room_list, 0, [], [], random.randint(0, 3))
     level_generator.populate_room(room_list, enemies, "enemy")
 
 
 while running:
+    print(game_state)
     # getting deltatime for fire rate cooldown
     t = pygame.time.get_ticks()
     deltaTime = (t - getTicksLastFrame) / 1000.0
@@ -158,9 +164,9 @@ while running:
             enemy.oldx, enemy.oldy = enemy.rect.topleft
 
             enemy.enemy_movement(screen, player_entity, main_camera.offset)
-            enemy_cords = REGULAR_FONT.render(str(("X:", enemy.rect.x, "Y:", enemy.rect.y)), True,colours[2])
+            enemy_health = REGULAR_FONT.render(str(enemy.max_health) + "/" + str(enemy.health), True,colours[2])
             text_pos = enemy.rect.center[0] - 50, enemy.rect.center[1] + 50
-            screen.blit(enemy_cords, text_pos - main_camera.offset)
+            screen.blit(enemy_health, text_pos - main_camera.offset)
 
             # Collision code
             for room in room_list:
@@ -169,9 +175,20 @@ while running:
                     if wall.mask.overlap(enemy.mask, collision_offset):
                         enemy.rect.topleft = enemy.oldx, enemy.oldy
 
+            for bullet in bullets:
+                collision_offset = (enemy.rect.x - bullet.rect.x), (enemy.rect.y - bullet.rect.y)
+                if bullet.mask.overlap(enemy.mask, collision_offset):
+                    bullets.remove(bullet)
+                    enemy.Take_Damage(player_entity.damage)
+                    if enemy.health <= 0:
+                        enemies.remove(enemy)
+
             collision_offset = (enemy.rect.x - player_entity.rect.x), (enemy.rect.y - player_entity.rect.y)
             if player_entity.mask.overlap(enemy.mask, collision_offset):
                 player_entity.rect.topleft = oldPlyerX, oldPlyerY
+                player_entity.Take_Damage(enemy.damage)
+                if player_entity.health <= 0:
+                    game_state = "dead"
                 enemy.rect.topleft = enemy.oldx,enemy.oldy
 
         for bullet in bullets:
@@ -194,8 +211,8 @@ while running:
                 if player_entity.mask.overlap(wall.mask, collision_offset):
                     player_entity.rect.topleft = oldPlyerX, oldPlyerY
 
+        # end level
         collision_offset = (level_generator.exit.rect.x - player_entity.rect.x), (level_generator.exit.rect.y - player_entity.rect.y)
-
         if player_entity.mask.overlap(level_generator.exit.mask, collision_offset):
             level_generator.level += 1
             new_level(level_generator.level)
@@ -215,8 +232,21 @@ while running:
         screen.blit(fps_counter, (0 , 0 ))
         level_counter = REGULAR_FONT.render("Level " + str(level_generator.level), True, colours[4])
         screen.blit(level_counter, ((screen.get_width() /2) - level_counter.get_width() / 2, screen.get_height()- 1000))
+
+        health_test = REGULAR_FONT.render(str(player_entity.max_health) + "/" + str(player_entity.health), True, colours[4])
+        screen.blit(health_test,
+                    ((screen.get_width() / 2) - level_counter.get_width() / 2, screen.get_height() - 500))
+
         print(level_generator.exit.rect.x, level_generator.exit.rect.y)
         screen.blit(level_generator.exit.surface, level_generator.exit.rect.topleft - main_camera.offset)
+
+    elif game_state == "dead":
+        screen.fill(colours[1])
+        level_counter = REGULAR_FONT.render("You died on level " + str(level_generator.level), True, colours[4])
+        screen.blit(level_counter,((screen.get_width() / 2) - level_counter.get_width() / 2, screen.get_height() - 1000))
+        back_to_main_menu.draw_button(screen)
+        if back_to_main_menu.function() == True:
+            game_state = "menu"
     # flip the display to put your work on screen
     pygame.display.flip()
     clock.tick(fps)

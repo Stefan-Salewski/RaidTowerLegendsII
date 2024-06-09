@@ -152,7 +152,7 @@ class level_generation():
                 randomx = random.randint(room_center_x - 400, room_center_x + 400)
                 randomy = random.randint(room_center_y - 400, room_center_y + 400)
                 if type == "enemy":
-                    object_to_add = Entity_Classes.Enemy(100 * (self.level /2), 10 * self.level, 4 + (self.level * 0.5), True, randomx, randomy, 50,50)
+                    object_to_add = Entity_Classes.Enemy(100 + (10 * self.level /2), 10 + (10 * self.level), 4 + (self.level * 0.5), True, randomx, randomy, 50,50)
                     print(object_to_add)
                 elif type == "loot":
                     pass
