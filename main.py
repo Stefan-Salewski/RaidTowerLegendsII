@@ -87,7 +87,7 @@ offset = pygame.math.Vector2()
 player_entity = Player(SCREEN_WIDTH,SCREEN_HEIGHT, bullet_img, bullets, game_state)
 pygame.mixer.init()
 pygame.mixer.music.load("Sound/Music/Menu - Spaceship Hangar.wav")
-pygame.mixer.music.set_volume(0)
+pygame.mixer.music.set_volume(25)
 pygame.mixer.music.play(-1)  # Play the music in a loop
 
 getTicksLastFrame = 0
