@@ -161,6 +161,8 @@ while running:
             enemy_cords = REGULAR_FONT.render(str(("X:", enemy.rect.x, "Y:", enemy.rect.y)), True,colours[2])
             text_pos = enemy.rect.center[0] - 50, enemy.rect.center[1] + 50
             screen.blit(enemy_cords, text_pos - main_camera.offset)
+
+            # Collision code
             for room in room_list:
                 for wall in room:
                     collision_offset = (enemy.rect.x - wall.get_rect().x), (enemy.rect.y - wall.get_rect().y)
