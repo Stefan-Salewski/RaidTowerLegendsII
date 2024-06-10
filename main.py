@@ -148,6 +148,7 @@ while running:
             player_entity.damage = 25
             player_entity.player_speed = 5
             player_entity.money = 0
+            player_entity.amount = 1
             game_state = "playing"
 
         if quit.function():

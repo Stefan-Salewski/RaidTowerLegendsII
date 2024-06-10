@@ -58,6 +58,7 @@ class Player(Entity):
         self.max_health = health
         self.health = self.max_health
         self.damage = damage
+        self.amount = 1
         self.game_state = game_state
         self.offset = pygame.math.Vector2()
         self.cancollide = cancollide
@@ -101,16 +102,28 @@ class Player(Entity):
         #shooting behaviour
         if pygame.mouse.get_pressed()[0] and self.firecooldown <= 0:
               # Normalize and scale by bullet speed
-            self.shoot_bullets(shoot_dir, screen_instance, 5, self.damage)
+            self.shoot_bullets(shoot_dir, screen_instance, 5, self.damage, self.amount)
             self.firecooldown = self.firerate
 
         self.firecooldown -= 1 * deltaTime
 
-    def shoot_bullets(self, movement_vector, screen_instance, speed, damage):
+    def shoot_bullets(self, movement_vector, screen_instance, speed, damage, amount):
         #normalizing and multiplying by speed to get the right vector
-        movement_vector = movement_vector.normalize() * speed
-        new_bullet = Bullet(damage, speed, movement_vector, screen_instance, self.bullet_img, self.rect.centerx,self.rect.centery)
-        self.bullets.append(new_bullet)
+        offset_range = 50  # Example: max offset is 10% of the original vector length
+        if amount == 1:
+            offset_range = 0
+        for _ in range(amount):
+            # Apply a slight random offset to the movement vector
+            offset_x = random.uniform(-offset_range, offset_range)
+            offset_y = random.uniform(-offset_range, offset_range)
+
+            # Create a new movement vector with the offset
+            offset_movement_vector = movement_vector + pygame.Vector2(offset_x, offset_y)
+            offset_movement_vector = offset_movement_vector.normalize() * speed
+
+            # Create and append the new bullet
+            new_bullet = Bullet(damage, speed, offset_movement_vector, screen_instance, self.bullet_img, self.rect.centerx, self.rect.centery)
+            self.bullets.append(new_bullet)
 
     def power_up(self):
         pass
@@ -215,6 +228,7 @@ class Chest(Entity):
         self.healthimage = pygame.image.load("Art/health.png").convert_alpha()
         self.speedimage = pygame.image.load("Art/move_speed.png").convert_alpha()
         self.attackspeedimage = pygame.image.load("Art/attack_speed.png").convert_alpha()
+        self.multishotimage = pygame.image.load("Art/Multishot.png").convert_alpha()
         self.invulnerability = True
         self.scale = scale
         self.cost = cost
@@ -246,6 +260,9 @@ class Chest(Entity):
         elif randomnum == 3:  # attackspeed
             poweruptoadd = "attackspeed"
             powerupimage = self.attackspeedimage
+        elif randomnum == 4: #multishot
+            poweruptoadd = "multishot"
+            powerupimage = self.multishotimage
         newpowerup = Powerup(self.rect.centerx, self.rect.centery - 100, self.scale, powerupimage,poweruptoadd)
         self.powerups.append(newpowerup)
 
@@ -268,14 +285,12 @@ class Powerup(Entity):
         if self.powerup == "health":
             player.max_health += 25
             player.health += 25
-            pass
         elif self.powerup == "damage":
             player.damage += 10
-            pass
         elif self.powerup == "speed":
             player.player_speed += 2
-            pass
         elif self.powerup == "attackspeed":
             player.firerate = player.firerate / 1.08
-            pass
+        elif self.powerup == "multishot":
+            player.amount += 1
         return
