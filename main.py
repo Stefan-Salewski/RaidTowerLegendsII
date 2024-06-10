@@ -270,7 +270,7 @@ while running:
         fps_counter = REGULAR_FONT.render(str(round(clock.get_fps(), 1)), True, colours[2])
         screen.blit(fps_counter, (0 , 0 ))
         level_counter = REGULAR_FONT.render("Level " + str(level_generator.level), True, colours[4])
-        screen.blit(level_counter, ((screen.get_width() /2) - level_counter.get_width() / 2, screen.get_height()- 1000))
+        screen.blit(level_counter, ((screen.get_width() /2) - level_counter.get_width() / 2, screen.get_height() / 12))
 
         health_test = REGULAR_FONT.render(str(player_entity.max_health) + "/" + str(player_entity.health), True, colours[4])
         screen.blit(health_test,((screen.get_width() / 2) - level_counter.get_width() / 2, screen.get_height() / 1.75))
@@ -283,10 +283,14 @@ while running:
     elif game_state == "dead":
         screen.fill(colours[1])
         level_counter = REGULAR_FONT.render("You died on level " + str(level_generator.level), True, colours[4])
-        screen.blit(level_counter,((screen.get_width() / 2) - level_counter.get_width() / 2, screen.get_height() - 1000))
+        screen.blit(level_counter,((screen.get_width() / 2) - level_counter.get_width() / 2, screen.get_height() / 12))
         back_to_main_menu.draw_button(screen)
         if back_to_main_menu.function() == True:
             game_state = "menu"
+            pygame.mixer.music.fadeout(500)  # 0.5 seconds of fadeout
+            # Load and play game music
+            pygame.mixer.music.load("Sound/Music/Menu - Spaceship Hangar.wav")
+            pygame.mixer.music.play(-1)  # Play the music in a loop
     # flip the display to put your work on screen
     pygame.display.flip()
     clock.tick(fps)
