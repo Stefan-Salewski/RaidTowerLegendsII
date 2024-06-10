@@ -1,15 +1,17 @@
-#*************************************************
-#level_generation.py
-#Has all the code to generate each level
-#Can be called from main to generate a list of rooms
-#Stefan Salewski
-#*************************************************
+# *************************************************
+# level_generation.py
+# Has all the code to generate each level
+# Can be called from main to generate a list of rooms
+# Stefan Salewski
+# *************************************************
 import Entity_Classes
 from Entity_Classes import Wall
 import random
+
+
 class level_generation():
 
-#fun initialization
+    # fun initialization
     def __init__(self, pygame_instance, screen, SCREEN_WIDTH, SCREEN_HEIGHT, chest_open, chest_closed, powerups):
         self.width = SCREEN_WIDTH
         self.powerups = powerups
@@ -20,12 +22,14 @@ class level_generation():
         self.pygame = pygame_instance
         self.level = 0
         self.exit = None
+
+    # creating rooms with walls and doors
     def create_room(self, x, y, prevdoor, door, iteration, numrooms):
         room = []
         if iteration == numrooms - 1:
             door = -1
             self.exit = Entity_Classes.Level_End(x + 500, y + 500, 50, 50)
-        # Top wall
+        # top wall
         topleft = Wall(x, y, 400, 10)
         topright = Wall(x + 600, y, 400, 10)
         room.append(topleft)
@@ -34,7 +38,7 @@ class level_generation():
             topdoor = Wall(x + 400, y, 200, 10)
             room.append(topdoor)
 
-        # Left wall
+        # left wall
         lefttop = Wall(x, y, 10, 400)
         leftbot = Wall(x, y + 600, 10, 400)
         room.append(lefttop)
@@ -43,8 +47,7 @@ class level_generation():
             leftdoor = Wall(x, y + 400, 10, 200)
             room.append(leftdoor)
 
-
-        # Right wall
+        # right wall
         righttop = Wall(x + 1000, y, 10, 400)
         rightbot = Wall(x + 1000, y + 600, 10, 400)
         room.append(righttop)
@@ -52,19 +55,19 @@ class level_generation():
         if prevdoor != 1 and door != 3:
             rightdoor = Wall(x + 1000, y + 400, 10, 200)
             room.append(rightdoor)
-        # Bottom wall
+
+        # bottom wall
         if prevdoor != 2 and door != 0:
             botdoor = Wall(x + 400, y + 1000, 200, 10)
             room.append(botdoor)
         botleft = Wall(x, y + 1000, 400, 10)
         botright = Wall(x + 600, y + 1000, 410, 10)
-
         room.append(botright)
         room.append(botleft)
 
         return room
 
-#lets go we can draw stuff in classes
+    # lets go we can draw stuff in classes
     def generate_level(self, numrooms, roomlist, iteration, prevx, prevy, randomnum):
         iteration = iteration
         prevx = prevx
@@ -72,13 +75,13 @@ class level_generation():
         rooms = roomlist
         if len(rooms) > 0:
             generating = True
-            max_attempts = 100  # Maximum number of attempts to avoid infinite loop
+            max_attempts = 100  # maximum number of attempts to avoid infinite loop
             attempts = 0
             while generating and attempts < max_attempts:
                 attempts += 1
                 nextrandomnum = random.randint(0, 3)
 
-                # Determine the new room position based on the random number
+                # determine the new room position based on the random number
                 if randomnum == 0:  # up
                     newx = prevx[-1]
                     newy = prevy[-1] + 1000
@@ -92,10 +95,11 @@ class level_generation():
                     newx = prevx[-1] + 1000
                     newy = prevy[-1]
 
+                # check if the new position is occupied
                 occupied = any(newx == x and newy == y for x, y in zip(prevx, prevy))
 
                 if not occupied:
-                    # Check nextrandomnum placement
+                    # check nextrandomnum placement
                     if nextrandomnum == 0:  # up
                         checkx = newx
                         checky = newy + 1000
@@ -110,46 +114,43 @@ class level_generation():
                         checky = newy
 
                     if any(checkx == x and checky == y for x, y in zip(prevx, prevy)):
-                        continue  # Skip this iteration if the next position is occupied
+                        continue  # skip this iteration if the next position is occupied
 
+                    # create the new room and update positions
                     newroom = self.create_room(newx, newy, randomnum, nextrandomnum, iteration, numrooms)
                     prevx.append(newx)
                     prevy.append(newy)
                     rooms.append(newroom)
                     generating = False
-            #this should only happen with a layout that cant make more rooms
-            #if it does then we can end it early
-            if attempts == max_attempts:
 
+            # this should only happen with a layout that cant make more rooms
+            # if it does then we can end it early
+            if attempts == max_attempts:
                 return rooms
         else:
-            #first room
+            # first room
             nextrandomnum = random.randint(0, 3)
-
             x = -500
             y = -500
-
             rooms.append(self.create_room(x, y, 4, nextrandomnum, iteration, numrooms))
             prevx.append(x)
             prevy.append(y)
 
+        # check if we're done or need more rooms
         if iteration == numrooms - 1:
-
             return rooms
         else:
             return self.generate_level(numrooms, rooms, iteration + 1, prevx, prevy, nextrandomnum)
 
-    #type, "enemy" for enemies, "loot" for upgrades and stuff
-    def populate_room(self, roomlist, objectlist, type):
-
+    # type, "enemy" for enemies, "loot" for upgrades and stuff
+    def populate_room( self, roomlist, objectlist, type):
         for room in roomlist:
             room_center_x = room[0].x + 500
             room_center_y = room[0].y + 500
             amount_to_spawn = random.randint(0, 2 + self.level)
 
-            if(roomlist[0] == room):
+            if (roomlist[0] == room):
                 amount_to_spawn = -1
-
 
             for i in range(amount_to_spawn):
                 randomx = random.randint(room_center_x - 400, room_center_x + 400)
