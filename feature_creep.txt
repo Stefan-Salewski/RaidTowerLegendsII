@@ -72,3 +72,7 @@ Make enemy movements
 Make player HUD's
 Make stat-based powerups
 Make an indicator of where you're shooting (player cannon)
+
+
+
+80 character line limit
