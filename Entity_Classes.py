@@ -11,19 +11,26 @@ BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 RANDOM = ((random.randint(0, 255)), (random.randint(0, 255)), (random.randint(0, 255)))
-colours = [WHITE, BLACK, RED, BLUE, GREEN, RANDOM]
+PURPLE = (128, 0, 128)
+colours = [WHITE, BLACK, RED, BLUE, GREEN, RANDOM, PURPLE]
 
 
 class Entity():
-    def __init__(self, invulnerability, health, damage, cancollide):
+    def __init__(self, invulnerability, health, damage, cancollide, game_state):
         #invulnerability should be a true/false toggle, walls should be true for example
         self.invulnerability = invulnerability
-        self.health = health
+        self.max_health = health
+        self.health = self.max_health
         self.damage = damage
         self.cancollide = cancollide
+        self.game_state = game_state
         self.offset = pygame.math.Vector2()
 
         print("Entity spawning")
+    def Take_Damage(self, damage):
+        self.health = self.health - damage
+        if self.health <= 0:
+            self.game_state = "dead"
 
     def movement(self, surface, rect, movement_vector, screen_instance, colorfill):
         rect.move_ip(movement_vector[0], movement_vector[1])  # moving it by whatever the new vectors coordinates are
@@ -43,26 +50,27 @@ class Entity():
 
 
 class Player(Entity):
-    def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, bullet_img, bullets, invulnerability=False, health=100, damage=25,firerate = 1, cancollide=True):
+    def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, bullet_img, bullets, game_state, invulnerability=False, health=100, damage=25,firerate = 1, cancollide=True, ):
         self.bullet_img = bullet_img
+        self.money = 100
         self.bullets = bullets
         self.invulnerability = invulnerability
-        self.health = health
+        self.max_health = health
+        self.health = self.max_health
         self.damage = damage
+        self.amount = 1
+        self.game_state = game_state
         self.offset = pygame.math.Vector2()
         self.cancollide = cancollide
         self.firerate = firerate
         self.firecooldown = self.firerate
-        self.rect = pygame.Rect((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 50, 50)
+        self.rect = pygame.Rect(0, 0, 50, 50)
         self.player_speed = 5
         self.surface = pygame.Surface(self.rect.size)
         self.mask = pygame.mask.from_surface(self.surface)
         self.player_moving = pygame.math.Vector2()
         self.mousepos = pygame.math.Vector2()
         print("Player initialized")
-    def update_bullet_list(self, bullet_list):
-        self.bullets = bullet_list
-
     def player_input(self, screen_instance, deltaTime):
         #pygame.draw.rect(screen_instance, colours[5], self.player)
         self.mousepos = pygame.mouse.get_pos()
@@ -94,16 +102,28 @@ class Player(Entity):
         #shooting behaviour
         if pygame.mouse.get_pressed()[0] and self.firecooldown <= 0:
               # Normalize and scale by bullet speed
-            self.shoot_bullets(shoot_dir, screen_instance, 5, self.damage)
+            self.shoot_bullets(shoot_dir, screen_instance, 5, self.damage, self.amount)
             self.firecooldown = self.firerate
 
         self.firecooldown -= 1 * deltaTime
 
-    def shoot_bullets(self, movement_vector, screen_instance, speed, damage):
+    def shoot_bullets(self, movement_vector, screen_instance, speed, damage, amount):
         #normalizing and multiplying by speed to get the right vector
-        movement_vector = movement_vector.normalize() * speed
-        new_bullet = Bullet(damage, speed, movement_vector, screen_instance, self.bullet_img, self.rect.centerx, self.rect.centery)
-        self.bullets.append(new_bullet)
+        offset_range = 50  # Example: max offset is 10% of the original vector length
+        if amount == 1:
+            offset_range = 0
+        for _ in range(amount):
+            # Apply a slight random offset to the movement vector
+            offset_x = random.uniform(-offset_range, offset_range)
+            offset_y = random.uniform(-offset_range, offset_range)
+
+            # Create a new movement vector with the offset
+            offset_movement_vector = movement_vector + pygame.Vector2(offset_x, offset_y)
+            offset_movement_vector = offset_movement_vector.normalize() * speed
+
+            # Create and append the new bullet
+            new_bullet = Bullet(damage, speed, offset_movement_vector, screen_instance, self.bullet_img, self.rect.centerx, self.rect.centery)
+            self.bullets.append(new_bullet)
 
     def power_up(self):
         pass
@@ -129,7 +149,6 @@ class Bullet(Entity):
 
     def Update(self, main_camera):
         self.position += self.movement_vector
-        print(self.position)
 
         # Calculate the screen position based on the camera's position
         screen_x = self.position.x - main_camera.offset[0]
@@ -142,39 +161,51 @@ class Bullet(Entity):
         # Draw the bullet at the calculated screen position
         self.screen_instance.blit(self.image, (screen_x, screen_y))
 
-
 class Enemy(Entity):
     def __init__(self, health, damage, speed, cancollide, x, y, width, height):
         self.invulnerability = True
-        self.health = health
+        self.max_health = health
+        self.health = self.max_health
         self.damage = damage
         self.enemy_speed = speed
         self.cancollide = cancollide
         self.x = x
         self.y = y
+        self.oldx = 0
+        self.oldy = 0
         self.width = width
         self.height = height
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.surface = pygame.Surface(self.rect.size)
         self.mask = pygame.mask.from_surface(self.surface)
+        self.enemy_moving = pygame.math.Vector2()
 
     def enemy_movement(self, screen_instance, player_ref, camera_offset):
-        enemy_moving = pygame.math.Vector2()  # creating a vector for enemy movement
+        self.enemy_moving = pygame.math.Vector2(player_ref.rect.centerx - self.rect.centerx, (player_ref.rect.centery) - self.rect.centery)
 
         # Use unit vectors to set directions and get consistent speed with diagonal and non-diagonal movement
-        if (enemy_moving.length() > 0):  # if there's movement basically.
-            enemy_moving = enemy_moving.normalize() * self.enemy_speed  # multiplying unit vector by speed
-
-        self.rect.move_ip(enemy_moving.x, enemy_moving.y)  # moving it by whatever the new vectors coordinates are
+        if(self.enemy_moving.length() <= 1000 and self.enemy_moving.length() > 0):
+            self.enemy_moving = self.enemy_moving.normalize() * self.enemy_speed
+            self.rect.move_ip(self.enemy_moving.x, self.enemy_moving.y)  # moving it by whatever the new vectors coordinates are
 
         #convert rect to a surface and draw to the screen
         self.surface.fill(colours[2])
         offset = self.rect.topleft - camera_offset
         screen_instance.blit(self.surface, offset)
 
-        return enemy_moving
+        return self.enemy_moving
 
-
+class Level_End(Entity):
+    def __init__(self, x, y, width, height):
+        self.invulnerability = True
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.surface = pygame.Surface(self.rect.size)
+        self.surface.fill(colours[6])
+        self.mask = pygame.mask.from_surface(self.surface)
 class Wall(Entity):
     def __init__(self, x, y, width, height):
         self.invulnerability = True
@@ -190,3 +221,76 @@ class Wall(Entity):
         return self.rect
 
     pass
+
+class Chest(Entity):
+    def __init__(self, x, y, scale, cost, chest_closed, chest_open, powerups):
+        self.damageimage = pygame.image.load("Art/damage.png").convert_alpha()
+        self.healthimage = pygame.image.load("Art/health.png").convert_alpha()
+        self.speedimage = pygame.image.load("Art/move_speed.png").convert_alpha()
+        self.attackspeedimage = pygame.image.load("Art/attack_speed.png").convert_alpha()
+        self.multishotimage = pygame.image.load("Art/Multishot.png").convert_alpha()
+        self.invulnerability = True
+        self.scale = scale
+        self.cost = cost
+        self.opened = False
+        self.powerups = powerups
+        self.chest_closed = chest_closed
+        self.chest_open = chest_open
+        image_width = self.chest_closed.get_width()
+        image_height = self.chest_closed.get_height()
+        self.image = pygame.transform.scale(self.chest_closed, (int(image_width * self.scale), int(image_height * self.scale)))
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def open_chest(self):
+        self.opened = True
+        self.image = pygame.transform.scale(self.chest_open, (int(16 * self.scale), int(16 * self.scale)))
+        randomnum = random.randint(0,3)
+        if randomnum == 0:  # health
+            poweruptoadd = "health"
+            powerupimage = self.healthimage
+        elif randomnum == 1:  # damage
+            poweruptoadd = "damage"
+            powerupimage = self.damageimage
+        elif randomnum == 2:  # speed
+            poweruptoadd = "speed"
+            powerupimage = self.speedimage
+        elif randomnum == 3:  # attackspeed
+            poweruptoadd = "attackspeed"
+            powerupimage = self.attackspeedimage
+        elif randomnum == 4: #multishot
+            poweruptoadd = "multishot"
+            powerupimage = self.multishotimage
+        newpowerup = Powerup(self.rect.centerx, self.rect.centery - 100, self.scale, powerupimage,poweruptoadd)
+        self.powerups.append(newpowerup)
+
+class Powerup(Entity):
+    def __init__(self, x, y, scale, powerupimage, powerup):
+
+        self.invulnerability = True
+        self.scale = scale
+        self.powerupimage = powerupimage
+        self.powerup = powerup
+        image_width = self.powerupimage.get_width()
+        image_height = self.powerupimage.get_height()
+        self.image = pygame.transform.scale(self.powerupimage, (int(image_width * self.scale), int(image_height * self.scale)))
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def power_up(self, player):
+        if self.powerup == "health":
+            player.max_health += 25
+            player.health += 25
+        elif self.powerup == "damage":
+            player.damage += 10
+        elif self.powerup == "speed":
+            player.player_speed += 2
+        elif self.powerup == "attackspeed":
+            player.firerate = player.firerate / 1.08
+        elif self.powerup == "multishot":
+            player.amount += 1
+        return

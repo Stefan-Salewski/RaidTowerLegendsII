@@ -1,5 +1,3 @@
-
-
 class SettingsMenu():
     def __init__(self,SCREEN_WIDTH,SCREEN_HEIGHT,clock,colours,screen_instance, fonts):
 
