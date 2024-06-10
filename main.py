@@ -103,8 +103,6 @@ while running:
 
         start.draw_button(screen)
         quit.draw_button(screen)
-        pygame.draw.rect(screen, colours[0], settings_white_rect)
-        settings.draw_button(screen)
 
 
         if start.function():
