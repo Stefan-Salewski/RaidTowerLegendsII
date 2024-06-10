@@ -71,14 +71,12 @@ settings_height = settings_img_hover.get_height() * 0.05 # multiplied by scale
 settings_white_rect = pygame.Rect(0, 0, settings_width - 2, settings_height - 2)
 settings_white_rect.center = (SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.05) # same placement as settings button
 
-#initializing object lists
 bullets = []
 level_end = []
 enemies = []
 chests = []
 powerups = []
-
-# game  levelsand camera offset vector
+# game  levels
 level_generator = level_generation(pygame, screen, SCREEN_WIDTH, SCREEN_HEIGHT, chest_open, chest_closed, powerups)
 room_list = []
 offset = pygame.math.Vector2()
@@ -97,21 +95,20 @@ getTicksLastFrame = 0
 main_camera = Camera()
 
 def new_level(level):
-    # makes new level
     player_entity.health = player_entity.max_health
     level_generator.level = level
     room_list.clear()
     enemies.clear()
     chests.clear()
     powerups.clear()
-    player_entity.rect.topleft = ( 0,0 )
+    player_entity.rect.topleft = 0,0
     level_generator.generate_level(10 + level, room_list, 0, [], [], random.randint(0, 3))
     level_generator.populate_room(room_list, enemies, "enemy")
     level_generator.populate_room(room_list, chests, "loot")
 
 
 while running:
-    # getting delta time for fire rate cooldown
+    # getting deltatime for fire rate cooldown
     t = pygame.time.get_ticks()
     deltaTime = (t - getTicksLastFrame) / 1000.0
     getTicksLastFrame = t
@@ -141,8 +138,7 @@ while running:
 
             # level generation
 
-            # spawn enemies and treasure in rooms
-            # set player stats to appropriate levels
+            #spawn enemies and treasure in rooms
             new_level(0)
             player_entity.max_health = 100
             player_entity.health = 100
@@ -154,17 +150,12 @@ while running:
             game_state = "playing"
 
         if quit.function():
-
-            # quit the loop
             running = False
 
         if settings.function():
-
-            # [redacted feature]
             game_state = "settings"
 
     elif game_state == "settings":
-        # [redacted feature]
 
         screen.fill("black")
 
@@ -176,17 +167,13 @@ while running:
 
 
     elif game_state == "playing":
-
-        # screen fill
+        #im normal during the day but at night turn to a sigma
         screen.fill(colours[1])
 
         # add player movement and other game logic here
         oldPlyerX, oldPlyerY = player_entity.rect.topleft
         player_entity.player_input(screen, deltaTime)
-
-        # making enemies
         for enemy in enemies:
-
             enemy.oldx, enemy.oldy = enemy.rect.topleft
 
             enemy.enemy_movement(screen, player_entity, main_camera.offset)
@@ -196,9 +183,7 @@ while running:
 
             # Collision code
             for room in room_list:
-
                 for wall in room:
-
                     collision_offset = (enemy.rect.x - wall.get_rect().x), (enemy.rect.y - wall.get_rect().y)
                     if wall.mask.overlap(enemy.mask, collision_offset):
                         enemy.rect.topleft = enemy.oldx, enemy.oldy
@@ -207,9 +192,7 @@ while running:
             enemies_to_remove = []
 
             for bullet in bullets:
-
                 for enemy in enemies:
-
                     collision_offset = (enemy.rect.x - bullet.rect.x), (enemy.rect.y - bullet.rect.y)
                     if bullet.mask.overlap(enemy.mask, collision_offset):
                         bullets_to_remove.append(bullet)
@@ -237,40 +220,24 @@ while running:
 
         for bullet in bullets:
             bullet.Update(main_camera)
-
         # draw the rooms
         for room in room_list:
-
             for wall in room:
-
-                # make walls
-
                 rect_surface = pygame.Surface(wall.get_rect().size, pygame.SRCALPHA)
                 rect_surface.fill(colours[0])
                 wall_offset = wall.get_rect().topleft - main_camera.offset
                 screen.blit(rect_surface, wall_offset)
 
-                #Collision code, make bullets die upon collision with wall
-
+                #Collision code
                 for bullet in bullets:
-
                     collision_offset = (wall.get_rect().x - bullet.rect.x), (wall.get_rect().y - bullet.rect.y)
                     if bullet.mask.overlap(wall.mask, collision_offset):
-
                         bullets.remove(bullet)
 
                 collision_offset = (wall.get_rect().x - player_entity.rect.x), (wall.get_rect().y - player_entity.rect.y)
-
-                # Collision code for player and wall
                 if player_entity.mask.overlap(wall.mask, collision_offset):
-
                     player_entity.rect.topleft = oldPlyerX, oldPlyerY
-
-
         for chest in chests:
-
-            # make chests
-
             chest_offset = chest.rect.topleft - main_camera.offset
             screen.blit(chest.image, chest_offset)
             chest_cost = REGULAR_FONT.render("$" + str(chest.cost), True,colours[0])
@@ -312,21 +279,17 @@ while running:
         screen.blit(level_generator.exit.surface, level_generator.exit.rect.topleft - main_camera.offset)
 
     elif game_state == "dead":
-
-        #Game over screen
-
         screen.fill(colours[1])
         level_counter = REGULAR_FONT.render("You died on level " + str(level_generator.level), True, colours[4])
-        screen.blit(level_counter,((screen.get_width() / 2) - level_counter.get_width() / 2, screen.get_height() - 1000))
+        screen.blit(level_counter,((screen.get_width() / 2) - level_counter.get_width() / 2, screen.get_height() / 12))
         back_to_main_menu.draw_button(screen)
-
-
         if back_to_main_menu.function() == True:
             game_state = "menu"
-
-
-    # flip the display to put your work on screen, fps'ing
-
+            pygame.mixer.music.fadeout(500)  # 0.5 seconds of fadeout
+            # Load and play game music
+            pygame.mixer.music.load("Sound/Music/Menu - Spaceship Hangar.wav")
+            pygame.mixer.music.play(-1)  # Play the music in a loop
+    # flip the display to put your work on screen
     pygame.display.flip()
     clock.tick(fps)
 
