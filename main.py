@@ -152,20 +152,6 @@ while running:
         if quit.function():
             running = False
 
-        if settings.function():
-            game_state = "settings"
-
-    elif game_state == "settings":
-
-        screen.fill("black")
-
-        settings_screen = menu.Settings(SCREEN_WIDTH, SCREEN_HEIGHT, clock, colours, screen, fonts)
-        settings_buttons = settings_screen.settings_buttons(SCREEN_WIDTH, SCREEN_HEIGHT, screen)
-
-        if (settings_buttons == "menu"):
-            game_state = "menu"
-
-
     elif game_state == "playing":
         #im normal during the day but at night turn to a sigma
         screen.fill(colours[1])
